@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="FitnessClub.API/FitnessClub.API.csproj" />
+  <Project Path="FitnessClub.Desktop/FitnessClub.Desktop.csproj" />
+</Solution>
