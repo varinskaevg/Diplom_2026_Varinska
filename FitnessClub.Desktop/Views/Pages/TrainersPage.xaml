@@ -1,0 +1,603 @@
+<Page x:Class="FitnessClub.Desktop.Views.Pages.TrainersPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#080b18">
+
+    <Grid Margin="28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Тренери" Foreground="White" FontSize="28" FontWeight="Bold"/>
+                <TextBlock Text="Управління персоналом та розрахунок зарплат" Foreground="#4b5563" FontSize="12"/>
+            </StackPanel>
+            <Button x:Name="AddTrainerBtn" Grid.Column="1" Content="＋  Додати тренера"
+                    Height="40" Padding="20,0" Cursor="Hand" Click="AddTrainer_Click"
+                    Visibility="Collapsed">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#6C63FF"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                          Margin="{TemplateBinding Padding}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#5a52e0"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+
+        <!-- Вкладки -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,20">
+            <Button x:Name="TabCardsBtn" Content="👥  Команда"
+                    Height="38" Padding="16,0" Cursor="Hand" Click="TabCards_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#6C63FF"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                          Margin="{TemplateBinding Padding}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button x:Name="TabSalaryBtn" Content="💰  Розрахунок ЗП"
+                    Height="38" Padding="16,0" Cursor="Hand" Margin="10,0,0,0"
+                    Click="TabSalary_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#1a1f35"/>
+                        <Setter Property="Foreground" Value="#9ca3af"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="BorderBrush" Value="#2d3348"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="10">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                          Margin="{TemplateBinding Padding}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#252b45"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+
+        <!-- ВКЛАДКА 1 — Картки тренерів -->
+        <ScrollViewer x:Name="CardsPanel" Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="TrainersList">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Width="280" Margin="0,0,16,16" CornerRadius="18"
+                                Background="#0d1020" BorderBrush="#1a1f35" BorderThickness="1" Cursor="Hand">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <Border CornerRadius="18,18,0,0" Height="80">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#1a1744" Offset="0"/>
+                                            <GradientStop Color="#2d1f6e" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Border HorizontalAlignment="Right" VerticalAlignment="Top"
+                                            Margin="0,10,12,0" CornerRadius="8" Padding="8,3">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#0d2a1a"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                        <Setter Property="Background" Value="#2d1f1f"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding StatusText}" FontSize="10" FontWeight="SemiBold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#34d399"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                            <Setter Property="Foreground" Value="#f87171"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </Border>
+                                <Border Width="70" Height="70" CornerRadius="35"
+                                        HorizontalAlignment="Center" Margin="0,-35,0,0"
+                                        BorderBrush="#080b18" BorderThickness="3">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#6C63FF" Offset="0"/>
+                                            <GradientStop Color="#a78bfa" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <TextBlock Text="{Binding Initials}" Foreground="White"
+                                               FontSize="22" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Margin="20,8,20,0">
+                                    <TextBlock Text="{Binding FullName}" Foreground="White" FontSize="15"
+                                               FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                                    <TextBlock Text="{Binding Specialization}" Foreground="#a78bfa" FontSize="11"
+                                               HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,0,0,4"/>
+                                    <TextBlock Text="{Binding Email}" Foreground="#4b5563" FontSize="10"
+                                               HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                                    <Border Background="#131929" CornerRadius="12" Padding="12,10" Margin="0,0,0,12">
+                                        <UniformGrid Columns="3">
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding ExperienceYears}" Foreground="White"
+                                                           FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="років" Foreground="#4b5563" FontSize="9" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding CompletedSchedules}" Foreground="#34d399"
+                                                           FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="занять" Foreground="#4b5563" FontSize="9" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding RateText}" Foreground="#f59e0b"
+                                                           FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="₴/год" Foreground="#4b5563" FontSize="9" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </UniformGrid>
+                                    </Border>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,12">
+                                        <TextBlock Text="🏢 В компанії: " Foreground="#4b5563" FontSize="11"/>
+                                        <TextBlock Text="{Binding WorkingFor}" Foreground="#9ca3af" FontSize="11"/>
+                                    </StackPanel>
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="8"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="8"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" Content="👤  Профіль" Height="34" Cursor="Hand"
+                                                Tag="{Binding Id}" Click="ViewProfile_Click">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Background" Value="#1e1b4b"/>
+                                                    <Setter Property="Foreground" Value="#a78bfa"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="FontSize" Value="11"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Background" Value="#2d2a6e"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                        <Button Grid.Column="2" Content="✏" Width="34" Height="34" Cursor="Hand"
+                                                ToolTip="Редагувати" Tag="{Binding Id}"
+                                                Click="EditTrainer_Click" Visibility="{Binding EditVisible}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Background" Value="#1a1f35"/>
+                                                    <Setter Property="Foreground" Value="#9ca3af"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Background" Value="#252b45"/>
+                                                                        <Setter Property="Foreground" Value="White"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                        <Button Grid.Column="4" Width="34" Height="34" Cursor="Hand"
+                                                Tag="{Binding Id}" Click="ToggleActive_Click"
+                                                Visibility="{Binding EditVisible}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Background" Value="#2d1f1f"/>
+                                                    <Setter Property="Foreground" Value="#f87171"/>
+                                                    <Setter Property="Content" Value="🔴"/>
+                                                    <Setter Property="ToolTip" Value="Звільнити"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Opacity" Value="0.8"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                            <Setter Property="Content" Value="🟢"/>
+                                                            <Setter Property="ToolTip" Value="Поновити"/>
+                                                            <Setter Property="Background" Value="#0d2a1a"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- ВКЛАДКА 2 — Розрахунок ЗП -->
+        <Grid x:Name="SalaryPanel" Grid.Row="2" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Фільтри -->
+            <Border Grid.Row="0" Background="#0d1020" CornerRadius="16"
+                    BorderBrush="#1a1f35" BorderThickness="1" Padding="20" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Тренер" Foreground="#8888aa" FontSize="11" Margin="0,0,0,6"/>
+                        <Border Background="#1a1f35" BorderBrush="#2a2f45" BorderThickness="1" CornerRadius="10">
+                            <ComboBox x:Name="SalaryTrainerBox" Background="Transparent" Foreground="White"
+                                      BorderThickness="0" Padding="12,8" FontSize="13" DisplayMemberPath="FullName"/>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Місяць" Foreground="#8888aa" FontSize="11" Margin="0,0,0,6"/>
+                        <Border Background="#1a1f35" BorderBrush="#2a2f45" BorderThickness="1" CornerRadius="10">
+                            <ComboBox x:Name="MonthBox" Background="Transparent" Foreground="White"
+                                      BorderThickness="0" Padding="12,8" FontSize="13"/>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Column="4">
+                        <TextBlock Text="Від" Foreground="#8888aa" FontSize="11" Margin="0,0,0,6"/>
+                        <Border Background="#1a1f35" BorderBrush="#2a2f45" BorderThickness="1" CornerRadius="10">
+                            <DatePicker x:Name="SalaryFromDate" Background="Transparent"
+                                        Foreground="White" BorderThickness="0" Padding="8,6"/>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Column="6">
+                        <TextBlock Text="До" Foreground="#8888aa" FontSize="11" Margin="0,0,0,6"/>
+                        <Border Background="#1a1f35" BorderBrush="#2a2f45" BorderThickness="1" CornerRadius="10">
+                            <DatePicker x:Name="SalaryToDate" Background="Transparent"
+                                        Foreground="White" BorderThickness="0" Padding="8,6"/>
+                        </Border>
+                    </StackPanel>
+                    <Button Grid.Column="8" Content="🔍  Розрахувати" Height="40" Padding="16,0"
+                            Cursor="Hand" VerticalAlignment="Bottom" Click="CalcSalary_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#6C63FF"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                  Margin="{TemplateBinding Padding}"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#5a52e0"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Підсумок -->
+            <StackPanel x:Name="SalarySummary" Grid.Row="1" Margin="0,0,0,16" Visibility="Collapsed">
+                <UniformGrid Columns="5" Margin="0,0,0,10">
+                    <Border Margin="0,0,10,0" CornerRadius="14" Padding="16">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1a1744" Offset="0"/>
+                                <GradientStop Color="#2d1f6e" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock Text="Всього занять" Foreground="#7c6fbf" FontSize="11"/>
+                            <TextBlock x:Name="TotalSessionsText" Text="0" Foreground="#a78bfa" FontSize="26" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Margin="0,0,10,0" CornerRadius="14" Padding="16">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#0f2a4a" Offset="0"/>
+                                <GradientStop Color="#1e40af" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock Text="Годин" Foreground="#3a6abf" FontSize="11"/>
+                            <TextBlock x:Name="TotalHoursText" Text="0" Foreground="#60a5fa" FontSize="26" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Margin="0,0,10,0" CornerRadius="14" Padding="16">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#053d2e" Offset="0"/>
+                                <GradientStop Color="#065f46" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock Text="База" Foreground="#2d8a6a" FontSize="11"/>
+                            <TextBlock x:Name="BaseTotalText" Text="0 ₴" Foreground="#34d399" FontSize="22" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Margin="0,0,10,0" CornerRadius="14" Padding="16">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#3d2a03" Offset="0"/>
+                                <GradientStop Color="#7c5a12" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock Text="Бонуси" Foreground="#a07a2d" FontSize="11"/>
+                            <TextBlock x:Name="BonusTotalText" Text="0 ₴" Foreground="#f59e0b" FontSize="22" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+                    <Border CornerRadius="14" Padding="16">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#3d1a03" Offset="0"/>
+                                <GradientStop Color="#7c2d12" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock Text="💰 Разом" Foreground="#a0522d" FontSize="11"/>
+                            <TextBlock x:Name="GrandTotalText" Text="0 ₴" Foreground="#fb923c" FontSize="26" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+
+                <!-- Індивідуальні / групові / місячний план -->
+                <StackPanel Orientation="Horizontal">
+                    <Border Background="#0f1a30" CornerRadius="10" Padding="14,10" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="👤" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <StackPanel>
+                                <TextBlock Text="Індивідуальних" Foreground="#4b6a9a" FontSize="10"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="IndividualSessionsText" Text="0"
+                                               Foreground="#60a5fa" FontSize="20" FontWeight="Bold"/>
+                                    <TextBlock Text=" занять" Foreground="#4b6a9a"
+                                               FontSize="11" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#1a0f30" CornerRadius="10" Padding="14,10" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="👥" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <StackPanel>
+                                <TextBlock Text="Групових" Foreground="#6a4b9a" FontSize="10"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="GroupSessionsText" Text="0"
+                                               Foreground="#c084fc" FontSize="20" FontWeight="Bold"/>
+                                    <TextBlock Text=" занять" Foreground="#6a4b9a"
+                                               FontSize="11" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="MonthlyBonusPanel" Background="#1a2a0a" CornerRadius="10"
+                            Padding="14,10" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📅" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <StackPanel>
+                                <TextBlock Text="Місячний план" Foreground="#4a7a2a" FontSize="10"/>
+                                <TextBlock x:Name="MonthlyBonusText" Text="+0 ₴"
+                                           Foreground="#86efac" FontSize="20" FontWeight="Bold"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Таблиця -->
+            <Border Grid.Row="2" CornerRadius="16" Background="#0d1020" BorderBrush="#1a1f35" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="20,16,20,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="ЗАНЯТТЯ" Foreground="#4b5563" FontSize="11"/>
+                        <TextBlock Grid.Column="1" Text="ДАТА" Foreground="#4b5563" FontSize="11"/>
+                        <TextBlock Grid.Column="2" Text="ГОД" Foreground="#4b5563" FontSize="11"/>
+                        <TextBlock Grid.Column="3" Text="УЧАСН." Foreground="#4b5563" FontSize="11"/>
+                        <TextBlock Grid.Column="4" Text="БАЗА" Foreground="#4b5563" FontSize="11" HorizontalAlignment="Right"/>
+                        <TextBlock Grid.Column="5" Text="БОНУС" Foreground="#4b5563" FontSize="11" HorizontalAlignment="Right"/>
+                        <TextBlock Grid.Column="6" Text="РАЗОМ" Foreground="#4b5563" FontSize="11" HorizontalAlignment="Right"/>
+                    </Grid>
+                    <ListView x:Name="SalaryList" Grid.Row="1" Background="Transparent"
+                              BorderThickness="0" Foreground="Black"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Border x:Name="row" Background="{TemplateBinding Background}"
+                                                    BorderBrush="#1a1f35" BorderThickness="0,0,0,1" Padding="20,12">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="row" Property="Background" Value="#131929"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="130"/>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border CornerRadius="6" Padding="6,3" Margin="0,0,8,0">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="#1a0f30"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsIndividual}" Value="True">
+                                                            <Setter Property="Background" Value="#0f1a30"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock FontSize="10" FontWeight="SemiBold">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="👥 Груп."/>
+                                                        <Setter Property="Foreground" Value="#c084fc"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsIndividual}" Value="True">
+                                                                <Setter Property="Text" Value="👤 Індив."/>
+                                                                <Setter Property="Foreground" Value="#60a5fa"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Border>
+                                        <TextBlock Text="{Binding ClassName}" Foreground="White"
+                                                   FontSize="13" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" Text="{Binding DateStr}" Foreground="#9ca3af" FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Hours}" Foreground="#9ca3af" FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding Participants}" Foreground="#9ca3af" FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="{Binding BaseEarningStr}" Foreground="#34d399" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="5" Text="{Binding BonusStr}" Foreground="#f59e0b" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="6" Text="{Binding TotalStr}" Foreground="#fb923c" FontSize="13" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <TextBlock x:Name="NoSalaryText" Grid.Row="1"
+                               Text="Оберіть тренера та вкажіть період для розрахунку"
+                               Foreground="#374151" FontSize="13"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

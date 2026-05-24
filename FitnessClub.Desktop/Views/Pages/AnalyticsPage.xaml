@@ -1,0 +1,2169 @@
+<Page x:Class="FitnessClub.Desktop.Views.Pages.AnalyticsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:oxy="http://oxyplot.org/wpf">
+
+    <Page.Resources>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             КОЛЬОРОВА ПАЛІТРА - CYBERPUNK/NEON ТЕМА
+             ══════════════════════════════════════════════════════════════ -->
+        <Color x:Key="BgDeep">#050810</Color>
+        <Color x:Key="BgCard">#0a0f1e</Color>
+        <Color x:Key="BgCardHover">#0f1628</Color>
+        <Color x:Key="BorderSubtle">#1a2340</Color>
+        <Color x:Key="BorderGlow">#2a3560</Color>
+
+        <Color x:Key="NeonCyan">#00f5ff</Color>
+        <Color x:Key="NeonPurple">#bf5af2</Color>
+        <Color x:Key="NeonPink">#ff2d92</Color>
+        <Color x:Key="NeonGreen">#00ff88</Color>
+        <Color x:Key="NeonOrange">#ff9f0a</Color>
+        <Color x:Key="NeonRed">#ff453a</Color>
+        <Color x:Key="NeonBlue">#0a84ff</Color>
+
+        <!-- Градієнтні пензлі -->
+        <LinearGradientBrush x:Key="GradientCyanPurple" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#00f5ff" Offset="0"/>
+            <GradientStop Color="#bf5af2" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="GradientPinkOrange" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#ff2d92" Offset="0"/>
+            <GradientStop Color="#ff9f0a" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="GradientGreenCyan" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#00ff88" Offset="0"/>
+            <GradientStop Color="#00f5ff" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- DropShadow ефект для світіння -->
+        <DropShadowEffect x:Key="GlowCyan" Color="#00f5ff" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+        <DropShadowEffect x:Key="GlowPurple" Color="#bf5af2" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+        <DropShadowEffect x:Key="GlowGreen" Color="#00ff88" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+        <DropShadowEffect x:Key="GlowPink" Color="#ff2d92" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
+        <DropShadowEffect x:Key="CardShadow" Color="#000000" BlurRadius="30" ShadowDepth="5" Opacity="0.6"/>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             СТИЛІ КНОПОК - НЕОНОВІ
+             ══════════════════════════════════════════════════════════════ -->
+
+        <!-- Tab Button - Glassmorphism -->
+        <Style x:Key="TabBtn" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#5a6080"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Grid>
+                            <!-- Glow підсвітка для активної вкладки -->
+                            <Border x:Name="GlowBorder" CornerRadius="12" Opacity="0">
+                                <Border.Background>
+                                    <RadialGradientBrush GradientOrigin="0.5,1" Center="0.5,1" RadiusX="1" RadiusY="1.5">
+                                        <GradientStop Color="#3000f5ff" Offset="0"/>
+                                        <GradientStop Color="#00000000" Offset="1"/>
+                                    </RadialGradientBrush>
+                                </Border.Background>
+                            </Border>
+
+                            <Border x:Name="Root" Background="{TemplateBinding Background}"
+                                    CornerRadius="12" Padding="{TemplateBinding Padding}"
+                                    BorderThickness="1" BorderBrush="Transparent">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Нижній індикатор -->
+                            <Border x:Name="Indicator" Height="3" VerticalAlignment="Bottom" 
+                                    Margin="8,0,8,-1" CornerRadius="2,2,0,0" Opacity="0">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#00f5ff" Offset="0"/>
+                                        <GradientStop Color="#bf5af2" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#00f5ff" BlurRadius="8" ShadowDepth="0" Opacity="0.8"/>
+                                </Border.Effect>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Root" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#15ffffff" Offset="0"/>
+                                            <GradientStop Color="#08ffffff" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="Root" Property="BorderBrush" Value="#2500f5ff"/>
+                                <Setter Property="Foreground" Value="#ffffff"/>
+                                <Setter TargetName="Indicator" Property="Opacity" Value="1"/>
+                                <Setter TargetName="GlowBorder" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#10ffffff"/>
+                                <Setter Property="Foreground" Value="#a0b0d0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Period Pill Button - Neon Border -->
+        <Style x:Key="PeriodBtn" TargetType="RadioButton">
+            <Setter Property="Background" Value="#08ffffff"/>
+            <Setter Property="Foreground" Value="#6080a0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#1a2340"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="Root" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Root" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#1500f5ff" Offset="0"/>
+                                            <GradientStop Color="#15bf5af2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="Root" Property="BorderBrush" Value="#00f5ff"/>
+                                <Setter Property="Foreground" Value="#00f5ff"/>
+                                <Setter TargetName="Root" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#00f5ff" BlurRadius="12" ShadowDepth="0" Opacity="0.3"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#12ffffff"/>
+                                <Setter TargetName="Root" Property="BorderBrush" Value="#2a3560"/>
+                                <Setter Property="Foreground" Value="#90b0d0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Action Button - Glowing -->
+        <Style x:Key="ActionBtn" TargetType="Button">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Root" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Opacity" Value="0.85"/>
+                                <Setter TargetName="Root" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="{Binding Background.Color, RelativeSource={RelativeSource TemplatedParent}}" 
+                                                          BlurRadius="15" ShadowDepth="0" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Root" Property="Opacity" Value="0.7"/>
+                                <Setter TargetName="Root" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Export Button - Green -->
+        <Style x:Key="ExportBtnGreen" TargetType="Button" BasedOn="{StaticResource ActionBtn}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#00994d" Offset="0"/>
+                        <GradientStop Color="#00ff88" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="#001a0d"/>
+            <Setter Property="BorderBrush" Value="#00ff88"/>
+        </Style>
+
+        <!-- Export Button - Blue -->
+        <Style x:Key="ExportBtnBlue" TargetType="Button" BasedOn="{StaticResource ActionBtn}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#0066cc" Offset="0"/>
+                        <GradientStop Color="#0a84ff" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="BorderBrush" Value="#0a84ff"/>
+        </Style>
+
+        <!-- Refresh Button -->
+        <Style x:Key="RefreshBtn" TargetType="Button" BasedOn="{StaticResource ActionBtn}">
+            <Setter Property="Background" Value="#10ffffff"/>
+            <Setter Property="Foreground" Value="#8090b0"/>
+            <Setter Property="BorderBrush" Value="#2a3560"/>
+        </Style>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             СТИЛІ КАРТОК - GLASSMORPHISM
+             ══════════════════════════════════════════════════════════════ -->
+
+        <!-- Main Card - Glass Effect -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#15ffffff"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#12ffffff" Offset="0"/>
+                        <GradientStop Color="#08ffffff" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="40" ShadowDepth="8" Opacity="0.4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Stat Card - Compact Glass -->
+        <Style x:Key="StatCard" TargetType="Border">
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#12ffffff"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#10ffffff" Offset="0"/>
+                        <GradientStop Color="#06ffffff" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- KPI Card - Neon Glow with Icon Background -->
+        <Style x:Key="KpiCardGreen" TargetType="Border">
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="Padding" Value="22"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#0d2a1f" Offset="0"/>
+                        <GradientStop Color="#0a4030" Offset="0.5"/>
+                        <GradientStop Color="#0d5540" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#2000ff88"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#00ff88" BlurRadius="25" ShadowDepth="0" Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="KpiCardPurple" TargetType="Border">
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="Padding" Value="22"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1a0d2e" Offset="0"/>
+                        <GradientStop Color="#2d1a4d" Offset="0.5"/>
+                        <GradientStop Color="#3d2266" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#20bf5af2"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#bf5af2" BlurRadius="25" ShadowDepth="0" Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="KpiCardOrange" TargetType="Border">
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="Padding" Value="22"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#2e1a0a" Offset="0"/>
+                        <GradientStop Color="#4d2d10" Offset="0.5"/>
+                        <GradientStop Color="#664015" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#20ff9f0a"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#ff9f0a" BlurRadius="25" ShadowDepth="0" Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="KpiCardRed" TargetType="Border">
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="Padding" Value="22"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#2e0a0a" Offset="0"/>
+                        <GradientStop Color="#4d1515" Offset="0.5"/>
+                        <GradientStop Color="#661a1a" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#20ff453a"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#ff453a" BlurRadius="25" ShadowDepth="0" Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="KpiCardCyan" TargetType="Border">
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="Padding" Value="22"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#0a1e2e" Offset="0"/>
+                        <GradientStop Color="#0d3044" Offset="0.5"/>
+                        <GradientStop Color="#10405a" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#2000f5ff"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#00f5ff" BlurRadius="25" ShadowDepth="0" Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         ГОЛОВНИЙ ФОН - COSMIC GRADIENT
+         ══════════════════════════════════════════════════════════════ -->
+    <Page.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#030508" Offset="0"/>
+            <GradientStop Color="#050a14" Offset="0.3"/>
+            <GradientStop Color="#080d1a" Offset="0.7"/>
+            <GradientStop Color="#0a1020" Offset="1"/>
+        </LinearGradientBrush>
+    </Page.Background>
+
+    <Grid>
+        <!-- Визначення рядків ОБОВ'ЯЗКОВО спочатку! -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Декоративні градієнтні круги на фоні (мають span на всі рядки) -->
+        <Canvas IsHitTestVisible="False" Grid.RowSpan="3">
+            <Ellipse Canvas.Left="-200" Canvas.Top="-150" Width="600" Height="600" Opacity="0.04">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#00f5ff" Offset="0"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse Canvas.Right="-100" Canvas.Bottom="-200" Width="500" Height="500" Opacity="0.04">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#bf5af2" Offset="0"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <!-- Додаткові декоративні елементи для крутішого вигляду -->
+            <Ellipse Canvas.Left="400" Canvas.Top="200" Width="300" Height="300" Opacity="0.025">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#ff2d92" Offset="0"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse Canvas.Right="300" Canvas.Top="-50" Width="250" Height="250" Opacity="0.02">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#00ff88" Offset="0"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+        </Canvas>
+        <Grid Grid.Row="0" Margin="40,32,40,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- ══════════════════════════════════════════════════════════════
+         HEADER - PREMIUM DESIGN
+         ══════════════════════════════════════════════════════════════ -->
+
+            <StackPanel>
+
+                <!-- Заголовок з неоновим акцентом -->
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock Text="Аналітика"
+                       Foreground="White"
+                       FontSize="32"
+                       FontWeight="Bold"
+                       FontFamily="Segoe UI">
+
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="#00f5ff"
+                                      BlurRadius="15"
+                                      ShadowDepth="0"
+                                      Opacity="0.3"/>
+                        </TextBlock.Effect>
+
+                    </TextBlock>
+
+                    <!-- Live індикатор -->
+                    <Border Margin="16,8,0,0"
+                    VerticalAlignment="Top"
+                    Background="#1500ff88"
+                    CornerRadius="12"
+                    Padding="10,4"
+                    BorderBrush="#00ff88"
+                    BorderThickness="1">
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <Ellipse Width="6"
+                             Height="6"
+                             Fill="#00ff88"
+                             Margin="0,0,6,0">
+
+                                <Ellipse.Effect>
+                                    <DropShadowEffect Color="#00ff88"
+                                              BlurRadius="6"
+                                              ShadowDepth="0"
+                                              Opacity="1"/>
+                                </Ellipse.Effect>
+
+                            </Ellipse>
+
+                            <TextBlock Text="LIVE"
+                               Foreground="#00ff88"
+                               FontSize="10"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+
+                <TextBlock Text="Повна статистика та детальні звіти по всіх показниках вашого фітнес-клубу"
+                   Foreground="#5a6580"
+                   FontSize="13"
+                   Margin="0,6,0,0"
+                   FontFamily="Segoe UI"/>
+
+            </StackPanel>
+
+            <!-- Кнопки експорту -->
+            <StackPanel Grid.Column="1"
+                Orientation="Horizontal"
+                VerticalAlignment="Center">
+
+                <Button Content="⬇ Excel"
+                Style="{StaticResource ExportBtnGreen}"
+                Margin="0,0,10,0"
+                Click="ExportOverviewCSV_Click"/>
+
+                <Button Content="⬇ Word"
+                Style="{StaticResource ExportBtnBlue}"
+                Margin="0,0,10,0"
+                Click="ExportOverviewWord_Click"/>
+
+                <Button Content="↻ Оновити"
+                Style="{StaticResource RefreshBtn}"
+                Click="Refresh_Click"/>
+
+            </StackPanel>
+
+        </Grid>
+        <!-- ══════════════════════════════════════════════════════════════
+             TAB BAR - FUTURISTIC GLASS
+             ══════════════════════════════════════════════════════════════ -->
+        <Border Grid.Row="1" Margin="40,20,40,0" CornerRadius="16" Padding="6">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#08ffffff" Offset="0"/>
+                    <GradientStop Color="#05ffffff" Offset="0.5"/>
+                    <GradientStop Color="#08ffffff" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#1500f5ff" Offset="0"/>
+                    <GradientStop Color="#10ffffff" Offset="0.5"/>
+                    <GradientStop Color="#15bf5af2" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Border.BorderThickness>1</Border.BorderThickness>
+
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton x:Name="TabOverview" Content="📊 Огляд" Style="{StaticResource TabBtn}"
+                                 GroupName="Tabs" IsChecked="True" Checked="Tab_Checked"/>
+                    <RadioButton x:Name="TabRevenue" Content="💰 Дохід" Style="{StaticResource TabBtn}"
+                                 GroupName="Tabs" Checked="Tab_Checked"/>
+                    <RadioButton x:Name="TabClients" Content="👥 Клієнти" Style="{StaticResource TabBtn}"
+                                 GroupName="Tabs" Checked="Tab_Checked"/>
+                    <RadioButton x:Name="TabAllTime" Content="🏆 Рейтинг" Style="{StaticResource TabBtn}"
+                                 GroupName="Tabs" Checked="Tab_Checked"/>
+                    <RadioButton x:Name="TabSessions" Content="🎯 Сеанси" Style="{StaticResource TabBtn}"
+                                 GroupName="Tabs" Checked="Tab_Checked"/>
+                    <RadioButton x:Name="TabMemberships" Content="🎫 Абонементи" Style="{StaticResource TabBtn}"
+                                 GroupName="Tabs" Checked="Tab_Checked"/>
+                    <RadioButton x:Name="TabAvgLoad" Content="📈 Завантаженість" Style="{StaticResource TabBtn}"
+                                 GroupName="Tabs" Checked="Tab_Checked"/>
+                    <RadioButton x:Name="TabCancels" Content="⚠ Скасування" Style="{StaticResource TabBtn}"
+                                 GroupName="Tabs" Checked="Tab_Checked"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             TAB CONTENT
+             ══════════════════════════════════════════════════════════════ -->
+        <Grid Grid.Row="2">
+
+            <!-- ═══════════════════ TAB 1: OVERVIEW ═══════════════════ -->
+            <ScrollViewer x:Name="PanelOverview" VerticalScrollBarVisibility="Auto" Visibility="Visible">
+                <StackPanel Margin="40,24,40,40">
+
+                    <!-- Section Label -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Border Width="4" Height="16" CornerRadius="2" Margin="0,0,10,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#00ff88" Offset="0"/>
+                                    <GradientStop Color="#00f5ff" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <TextBlock Text="ФІНАНСОВІ ПОКАЗНИКИ" Foreground="#5a6580" FontSize="11"
+                                   FontWeight="Bold" VerticalAlignment="Center" 
+                                   FontFamily="Segoe UI"/>
+                    </StackPanel>
+
+                    <!-- KPI Cards Row 1 - Finances -->
+                    <UniformGrid Columns="4" Margin="0,0,0,24">
+                        <!-- Total Revenue -->
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardGreen}">
+                            <Grid>
+                                <!-- Background Icon -->
+                                <TextBlock Text="💵" FontSize="60" Opacity="0.08" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-10"/>
+                                <StackPanel>
+                                    <TextBlock Text="Загальний дохід" Foreground="#40a070" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock x:Name="TotalRevenueText" Text="0 ₴" Foreground="#00ff88"
+                                               FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="#00ff88" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock Text="за весь час" Foreground="#4a6070" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Month Revenue -->
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardPurple}">
+                            <Grid>
+                                <TextBlock Text="📅" FontSize="60" Opacity="0.08" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-10"/>
+                                <StackPanel>
+                                    <TextBlock Text="Дохід цього місяця" Foreground="#9070c0" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock x:Name="MonthRevenueText" Text="0 ₴" Foreground="#bf5af2"
+                                               FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="#bf5af2" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock x:Name="MonthGrowthText" Text="" Foreground="#6a5090" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Average Check -->
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardOrange}">
+                            <Grid>
+                                <TextBlock Text="🧾" FontSize="60" Opacity="0.08" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-10"/>
+                                <StackPanel>
+                                    <TextBlock Text="Середній чек" Foreground="#c08040" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock x:Name="AvgPaymentText" Text="0 ₴" Foreground="#ff9f0a"
+                                               FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="#ff9f0a" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock Text="за платіж" Foreground="#906850" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Refunds -->
+                        <Border Style="{StaticResource KpiCardRed}">
+                            <Grid>
+                                <TextBlock Text="↩" FontSize="60" Opacity="0.08" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-10"/>
+                                <StackPanel>
+                                    <TextBlock Text="Повернення коштів" Foreground="#c04040" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock x:Name="TotalRefundsText" Text="0 ₴" Foreground="#ff453a"
+                                               FontSize="28" FontWeight="Bold" Margin="0,8,0,0">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="#ff453a" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock x:Name="NetRevenueText" Text="" Foreground="#904545" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </UniformGrid>
+
+                    <!-- Section Label - Clients -->
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,16">
+                        <Border Width="4" Height="16" CornerRadius="2" Margin="0,0,10,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#00f5ff" Offset="0"/>
+                                    <GradientStop Color="#bf5af2" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <TextBlock Text="КЛІЄНТИ ТА ЗАНЯТТЯ" Foreground="#5a6580" FontSize="11"
+                                   FontWeight="Bold" VerticalAlignment="Center" 
+                                   FontFamily="Segoe UI"/>
+                    </StackPanel>
+
+                    <!-- KPI Cards Row 2 - Clients -->
+                    <UniformGrid Columns="4" Margin="0,0,0,28">
+                        <Border Margin="0,0,12,0" Style="{StaticResource StatCard}">
+                            <Grid>
+                                <TextBlock Text="👤" FontSize="50" Opacity="0.06" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-8"/>
+                                <StackPanel>
+                                    <TextBlock Text="Нових клієнтів" Foreground="#6a7590" FontSize="12"/>
+                                    <TextBlock x:Name="NewClientsText" Text="0" Foreground="White"
+                                               FontSize="32" FontWeight="Bold" Margin="0,6,0,0"/>
+                                    <TextBlock x:Name="NewClientsSubText" Text="" Foreground="#4a5570" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Margin="0,0,12,0" Style="{StaticResource StatCard}">
+                            <Grid>
+                                <TextBlock Text="🎫" FontSize="50" Opacity="0.06" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-8"/>
+                                <StackPanel>
+                                    <TextBlock Text="Активних абонементів" Foreground="#6a7590" FontSize="12"/>
+                                    <TextBlock x:Name="ActiveMembersText" Text="0" Foreground="#00ff88"
+                                               FontSize="32" FontWeight="Bold" Margin="0,6,0,0"/>
+                                    <TextBlock x:Name="ExpiringSoonText" Text="" Foreground="#ff9f0a" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Margin="0,0,12,0" Style="{StaticResource StatCard}">
+                            <Grid>
+                                <TextBlock Text="🏃" FontSize="50" Opacity="0.06" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-8"/>
+                                <StackPanel>
+                                    <TextBlock Text="Відвідувань за тиждень" Foreground="#6a7590" FontSize="12"/>
+                                    <TextBlock x:Name="VisitsWeekText" Text="0" Foreground="#0a84ff"
+                                               FontSize="32" FontWeight="Bold" Margin="0,6,0,0"/>
+                                    <TextBlock Text="унікальних відвідань" Foreground="#4a5570" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Style="{StaticResource StatCard}">
+                            <Grid>
+                                <TextBlock Text="⏰" FontSize="50" Opacity="0.06" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-8"/>
+                                <StackPanel>
+                                    <TextBlock Text="Закінчується скоро" Foreground="#6a7590" FontSize="12"/>
+                                    <TextBlock x:Name="ExpiringSoonBigText" Text="0" Foreground="#ff9f0a"
+                                               FontSize="32" FontWeight="Bold" Margin="0,6,0,0"/>
+                                    <TextBlock Text="абонементів (7 днів)" Foreground="#4a5570" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </UniformGrid>
+
+                    <!-- Charts Row 1 -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientGreenCyan}"/>
+                                    <TextBlock Text="Дохід та повернення по місяцях (₴)"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="RevenueChart" Height="260" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientCyanPurple}"/>
+                                    <TextBlock Text="Методи оплати"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="PaymentMethodsChart" Height="260" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Charts Row 2 -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientCyanPurple}"/>
+                                    <TextBlock Text="Нові клієнти по місяцях"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="ClientsChart" Height="240" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientPinkOrange}"/>
+                                    <TextBlock Text="Відвідування по місяцях"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="VisitsMonthChart" Height="240" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Charts Row 3 -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientGreenCyan}"/>
+                                    <TextBlock Text="Активність по днях тижня"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="DowChart" Height="240" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientPinkOrange}"/>
+                                    <TextBlock Text="Розподіл типів абонементів"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="MembershipPieChart" Height="240" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Top Lists Row -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Top Trainers -->
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientCyanPurple}"/>
+                                    <TextBlock Text="Топ тренери" Foreground="White"
+                                               FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <ItemsControl x:Name="TopTrainersList">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,14">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Width="36" Height="36" CornerRadius="18" Margin="0,0,14,0">
+                                                    <Border.Background>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                            <GradientStop Color="#00f5ff" Offset="0"/>
+                                                            <GradientStop Color="#bf5af2" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Color="#00f5ff" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+                                                    </Border.Effect>
+                                                    <TextBlock Text="{Binding Rank}" Foreground="White"
+                                                               FontSize="13" FontWeight="Bold"
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Name}" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                                    <Border Height="5" CornerRadius="3" Margin="0,6,0,0"
+                                                            HorizontalAlignment="Left" Width="{Binding BarWidth}">
+                                                        <Border.Background>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="#00f5ff" Offset="0"/>
+                                                                <GradientStop Color="#bf5af2" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Border.Background>
+                                                        <Border.Effect>
+                                                            <DropShadowEffect Color="#00f5ff" BlurRadius="6" ShadowDepth="0" Opacity="0.5"/>
+                                                        </Border.Effect>
+                                                    </Border>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="2" Text="{Binding CountText}"
+                                                           Foreground="#00f5ff" FontSize="14" FontWeight="Bold"
+                                                           VerticalAlignment="Center" Margin="14,0,0,0"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Top Classes -->
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientGreenCyan}"/>
+                                    <TextBlock Text="Топ заняття" Foreground="White"
+                                               FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <ItemsControl x:Name="TopClassesList">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,14">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Width="36" Height="36" CornerRadius="18" Margin="0,0,14,0">
+                                                    <Border.Background>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                            <GradientStop Color="#00ff88" Offset="0"/>
+                                                            <GradientStop Color="#00f5ff" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Color="#00ff88" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+                                                    </Border.Effect>
+                                                    <TextBlock Text="{Binding Rank}" Foreground="White"
+                                                               FontSize="13" FontWeight="Bold"
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Name}" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                                    <Border Height="5" CornerRadius="3" Margin="0,6,0,0"
+                                                            HorizontalAlignment="Left" Width="{Binding BarWidth}">
+                                                        <Border.Background>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="#00ff88" Offset="0"/>
+                                                                <GradientStop Color="#00f5ff" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Border.Background>
+                                                        <Border.Effect>
+                                                            <DropShadowEffect Color="#00ff88" BlurRadius="6" ShadowDepth="0" Opacity="0.5"/>
+                                                        </Border.Effect>
+                                                    </Border>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="2" Text="{Binding CountText}"
+                                                           Foreground="#00ff88" FontSize="14" FontWeight="Bold"
+                                                           VerticalAlignment="Center" Margin="14,0,0,0"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Section Label - Payroll -->
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,16">
+                        <Border Width="4" Height="16" CornerRadius="2" Margin="0,0,10,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#ff453a" Offset="0"/>
+                                    <GradientStop Color="#ff9f0a" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <TextBlock Text="ВИТРАТИ НА ЗАРПЛАТУ ТРЕНЕРІВ" Foreground="#5a6580" FontSize="11"
+                                   FontWeight="Bold" VerticalAlignment="Center" 
+                                   FontFamily="Segoe UI"/>
+                    </StackPanel>
+
+                    <!-- Payroll KPIs -->
+                    <UniformGrid Columns="3" Margin="0,0,0,20">
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardRed}">
+                            <Grid>
+                                <TextBlock Text="💸" FontSize="55" Opacity="0.08" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-8"/>
+                                <StackPanel>
+                                    <TextBlock Text="Загальні витрати на ЗП" Foreground="#c04040" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock x:Name="TotalPayrollText" Text="0 ₴" Foreground="#ff453a"
+                                               FontSize="26" FontWeight="Bold" Margin="0,6,0,0">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="#ff453a" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock Text="тренерам за весь час" Foreground="#804545" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardGreen}">
+                            <Grid>
+                                <TextBlock Text="📈" FontSize="55" Opacity="0.08" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-8"/>
+                                <StackPanel>
+                                    <TextBlock Text="Чистий прибуток (після ЗП)" Foreground="#40a070" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock x:Name="NetAfterPayrollText" Text="0 ₴" Foreground="#00ff88"
+                                               FontSize="26" FontWeight="Bold" Margin="0,6,0,0">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="#00ff88" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock Text="дохід − повернення − ЗП" Foreground="#4a6070" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Style="{StaticResource KpiCardOrange}">
+                            <Grid>
+                                <TextBlock Text="🎁" FontSize="55" Opacity="0.08" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                           Margin="0,0,-5,-8"/>
+                                <StackPanel>
+                                    <TextBlock Text="Бонусів виплачено" Foreground="#c08040" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock x:Name="TotalBonusText" Text="0 ₴" Foreground="#ff9f0a"
+                                               FontSize="26" FontWeight="Bold" Margin="0,6,0,0">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="#ff9f0a" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock Text="за 7+ занять в тиждень" Foreground="#906850" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </UniformGrid>
+
+                    <!-- Payroll Details Table -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                        Background="{StaticResource GradientCyanPurple}"/>
+                                <TextBlock Text="Деталізація зарплат тренерів" Foreground="White"
+                                           FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Header -->
+                            <Border Background="#08ffffff" CornerRadius="10" Padding="16,12" Margin="0,0,0,8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="110"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="ТРЕНЕР" Foreground="#5a6580" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="1" Text="ЗАНЯТЬ" Foreground="#5a6580" FontSize="10" FontWeight="Bold"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="ЗА ЗАНЯТТЯ" Foreground="#5a6580" FontSize="10" FontWeight="Bold" 
+                                               HorizontalAlignment="Center"/>
+
+                                    
+                                    <TextBlock Grid.Column="3" Text="БОНУС" Foreground="#5a6580" FontSize="10" FontWeight="Bold"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="ТИЖНІВ" Foreground="#5a6580" FontSize="10" FontWeight="Bold"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="5" Text="ВСЬОГО" Foreground="#5a6580" FontSize="10" FontWeight="Bold"
+                                               HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+
+                            <ItemsControl x:Name="PayrollList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#10ffffff" BorderThickness="0,0,0,1" Padding="0,14">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="90"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                    <ColumnDefinition Width="90"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Border Width="38" Height="38" CornerRadius="19" Margin="0,0,12,0">
+                                                        <Border.Background>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                <GradientStop Color="#00f5ff" Offset="0"/>
+                                                                <GradientStop Color="#bf5af2" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Border.Background>
+                                                        <TextBlock Text="{Binding Initials}" Foreground="White"
+                                                                   FontSize="12" FontWeight="Bold"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <StackPanel VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Name}" Foreground="White" FontSize="14" FontWeight="SemiBold"/>
+                                                        <TextBlock Text="{Binding RateInfo}" Foreground="#5a6580" FontSize="11"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="1" Text="{Binding TotalSchedules}"
+                                                           Foreground="#9aa0b0" FontSize="14"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding SessionPayText}"
+                                                           Foreground="#0a84ff" FontSize="14" FontWeight="SemiBold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="3" Text="{Binding BonusText}"
+                                                           FontSize="14" FontWeight="SemiBold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="#5a6580"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding HasBonus}" Value="True">
+                                                                    <Setter Property="Foreground" Value="#ff9f0a"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <StackPanel Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding WeeksWithBonusText}" FontSize="14" HorizontalAlignment="Center">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Foreground" Value="#5a6580"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding HasBonus}" Value="True">
+                                                                        <Setter Property="Foreground" Value="#ff9f0a"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="5" Text="{Binding TotalPayText}"
+                                                           Foreground="#00ff88" FontSize="15" FontWeight="Bold"
+                                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ═══════════════════ TAB 2: REVENUE ═══════════════════ -->
+            <ScrollViewer x:Name="PanelRevenue" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel Margin="40,24,40,40">
+
+                    <!-- Period picker + export -->
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="RevPeriodWeek" Content="Тиждень" Style="{StaticResource PeriodBtn}"
+                                         GroupName="RevPeriod" Margin="0,0,8,0" Checked="RevPeriod_Checked"/>
+                            <RadioButton x:Name="RevPeriodMonth" Content="Місяць" Style="{StaticResource PeriodBtn}"
+                                         GroupName="RevPeriod" Margin="0,0,8,0" IsChecked="True" Checked="RevPeriod_Checked"/>
+                            <RadioButton x:Name="RevPeriodQ" Content="Квартал" Style="{StaticResource PeriodBtn}"
+                                         GroupName="RevPeriod" Margin="0,0,8,0" Checked="RevPeriod_Checked"/>
+                            <RadioButton x:Name="RevPeriodYear" Content="Рік" Style="{StaticResource PeriodBtn}"
+                                         GroupName="RevPeriod" Margin="0,0,8,0" Checked="RevPeriod_Checked"/>
+                            <RadioButton x:Name="RevPeriodAll" Content="Весь час" Style="{StaticResource PeriodBtn}"
+                                         GroupName="RevPeriod" Margin="0,0,16,0" Checked="RevPeriod_Checked"/>
+
+                            <!-- Custom dates -->
+                            <Border Background="#08ffffff" BorderBrush="#15ffffff" BorderThickness="1"
+                                    CornerRadius="10" Padding="14,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="з" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <DatePicker x:Name="RevDateFrom" FontSize="12" Width="120"
+                                                SelectedDateChanged="RevCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                    <TextBlock Text="по" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="10,0,8,0"/>
+                                    <DatePicker x:Name="RevDateTo" FontSize="12" Width="120"
+                                                SelectedDateChanged="RevCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="⬇ CSV" Style="{StaticResource ExportBtnGreen}"
+                                    Margin="0,0,10,0" Click="ExportRevenueCSV_Click"/>
+                            <Button Content="⬇ Word" Style="{StaticResource ExportBtnBlue}"
+                                    Click="ExportRevenueWord_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- KPI Row -->
+                    <UniformGrid Columns="4" Margin="0,0,0,24">
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardGreen}">
+                            <StackPanel>
+                                <TextBlock Text="Дохід за період" Foreground="#40a070" FontSize="12"/>
+                                <TextBlock x:Name="RevKpiTotal" Text="0 ₴" Foreground="#00ff88"
+                                           FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                                <TextBlock x:Name="RevKpiPeriodLabel" Text="" Foreground="#4a6070" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardRed}">
+                            <StackPanel>
+                                <TextBlock Text="Повернення" Foreground="#c04040" FontSize="12"/>
+                                <TextBlock x:Name="RevKpiRefunds" Text="0 ₴" Foreground="#ff453a"
+                                           FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardOrange}">
+                            <StackPanel>
+                                <TextBlock Text="Середній чек" Foreground="#c08040" FontSize="12"/>
+                                <TextBlock x:Name="RevKpiAvg" Text="0 ₴" Foreground="#ff9f0a"
+                                           FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource KpiCardPurple}">
+                            <StackPanel>
+                                <TextBlock Text="Чистий дохід" Foreground="#9070c0" FontSize="12"/>
+                                <TextBlock x:Name="RevKpiNet" Text="0 ₴" Foreground="#bf5af2"
+                                           FontSize="28" FontWeight="Bold" Margin="0,8,0,0"/>
+                                <TextBlock Text="після повернень" Foreground="#6a5090" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <!-- Charts -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientGreenCyan}"/>
+                                    <TextBlock Text="Динаміка доходу та повернень (₴)"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="RevRevenueChart" Height="260" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientCyanPurple}"/>
+                                    <TextBlock Text="Методи оплати"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="RevPaymentPie" Height="260" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Transactions Table -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,20">
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientPinkOrange}"/>
+                                    <TextBlock Text="Транзакції за період" Foreground="White"
+                                               FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <TextBlock x:Name="RevTransactionCount" Text="" Foreground="#5a6580"
+                                           FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <Border Background="#08ffffff" CornerRadius="10" Padding="16,12" Margin="0,0,0,8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="130"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="110"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="ДАТА" Foreground="#5a6580" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="1" Text="КЛІЄНТ" Foreground="#5a6580" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="2" Text="МЕТОД" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="СТАТУС" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="СУМА" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+
+                            <ItemsControl x:Name="RevTransactionsList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#10ffffff" BorderThickness="0,0,0,1" Padding="0,12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="130"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                    <ColumnDefinition Width="90"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding DateStr}" Foreground="#7a8090" FontSize="13"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding ClientName}" Foreground="White" FontSize="14"/>
+                                                    <TextBlock Text="{Binding Description}" Foreground="#5a6580" FontSize="11"/>
+                                                </StackPanel>
+                                                <Border Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                        Background="#10ffffff" CornerRadius="8" Padding="10,5">
+                                                    <TextBlock Text="{Binding Method}" Foreground="#9aa0b0" FontSize="12"/>
+                                                </Border>
+                                                <Border Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                        Background="{Binding StatusBg}" CornerRadius="8" Padding="10,5">
+                                                    <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusFg}" FontSize="12"/>
+                                                </Border>
+                                                <TextBlock Grid.Column="4" Text="{Binding AmountStr}"
+                                                           Foreground="{Binding AmountColor}" FontSize="14" FontWeight="SemiBold"
+                                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ═══════════════════ TAB 3: ACTIVE CLIENTS ═══════════════════ -->
+            <ScrollViewer x:Name="PanelClients" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel Margin="40,24,40,40">
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="CliPeriodWeek" Content="Тиждень" Style="{StaticResource PeriodBtn}"
+                                         GroupName="CliPeriod" Margin="0,0,8,0" Checked="CliPeriod_Checked"/>
+                            <RadioButton x:Name="CliPeriodMonth" Content="Місяць" Style="{StaticResource PeriodBtn}"
+                                         GroupName="CliPeriod" Margin="0,0,8,0" IsChecked="True" Checked="CliPeriod_Checked"/>
+                            <RadioButton x:Name="CliPeriodQ" Content="Квартал" Style="{StaticResource PeriodBtn}"
+                                         GroupName="CliPeriod" Margin="0,0,8,0" Checked="CliPeriod_Checked"/>
+                            <RadioButton x:Name="CliPeriodYear" Content="Рік" Style="{StaticResource PeriodBtn}"
+                                         GroupName="CliPeriod" Margin="0,0,16,0" Checked="CliPeriod_Checked"/>
+                            <Border Background="#08ffffff" BorderBrush="#15ffffff" BorderThickness="1"
+                                    CornerRadius="10" Padding="14,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="з" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <DatePicker x:Name="CliDateFrom" FontSize="12" Width="120"
+                                                SelectedDateChanged="CliCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                    <TextBlock Text="по" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="10,0,8,0"/>
+                                    <DatePicker x:Name="CliDateTo" FontSize="12" Width="120"
+                                                SelectedDateChanged="CliCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="⬇ CSV" Style="{StaticResource ExportBtnGreen}"
+                                    Margin="0,0,10,0" Click="ExportClientsCSV_Click"/>
+                            <Button Content="⬇ Word" Style="{StaticResource ExportBtnBlue}"
+                                    Click="ExportClientsWord_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <UniformGrid Columns="3" Margin="0,0,0,24">
+                        <Border Margin="0,0,12,0" Style="{StaticResource StatCard}">
+                            <StackPanel>
+                                <TextBlock Text="Унікальних клієнтів" Foreground="#6a7590" FontSize="12"/>
+                                <TextBlock x:Name="CliKpiUnique" Text="0" Foreground="White"
+                                           FontSize="32" FontWeight="Bold" Margin="0,6,0,0"/>
+                                <TextBlock Text="відвідало за період" Foreground="#4a5570" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardGreen}">
+                            <StackPanel>
+                                <TextBlock Text="Нових клієнтів" Foreground="#40a070" FontSize="12"/>
+                                <TextBlock x:Name="CliKpiNew" Text="0" Foreground="#00ff88"
+                                           FontSize="32" FontWeight="Bold" Margin="0,6,0,0"/>
+                                <TextBlock Text="вперше за цей період" Foreground="#4a6070" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource KpiCardPurple}">
+                            <StackPanel>
+                                <TextBlock Text="Середньо занять на клієнта" Foreground="#9070c0" FontSize="12"/>
+                                <TextBlock x:Name="CliKpiAvgVisits" Text="0" Foreground="#bf5af2"
+                                           FontSize="32" FontWeight="Bold" Margin="0,6,0,0"/>
+                                <TextBlock Text="відвідань за період" Foreground="#6a5090" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientCyanPurple}"/>
+                                    <TextBlock Text="Активність клієнтів по днях"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="CliActivityChart" Height="240" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientGreenCyan}"/>
+                                    <TextBlock Text="Новий клієнт vs Повторний"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="CliNewVsReturn" Height="240" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                        Background="{StaticResource GradientPinkOrange}"/>
+                                <TextBlock Text="Найактивніші клієнти за період"
+                                           Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <Border Background="#08ffffff" CornerRadius="10" Padding="16,12" Margin="0,0,0,8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="110"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="#" Foreground="#5a6580" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="1" Text="КЛІЄНТ" Foreground="#5a6580" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="2" Text="ЗАНЯТЬ" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="ОСТАННЯ ВІЗИТА" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="ОПЛАЧЕНО" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+                            <ItemsControl x:Name="CliActiveList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#10ffffff" BorderThickness="0,0,0,1" Padding="0,12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="40"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="100"/>
+                                                    <ColumnDefinition Width="120"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Rank}" Foreground="#5a6580" FontSize="14" VerticalAlignment="Center"/>
+                                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border Width="36" Height="36" CornerRadius="18" Margin="0,0,12,0">
+                                                        <Border.Background>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                <GradientStop Color="#00f5ff" Offset="0"/>
+                                                                <GradientStop Color="#bf5af2" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Border.Background>
+                                                        <TextBlock Text="{Binding Initials}" Foreground="White"
+                                                                   FontSize="11" FontWeight="Bold"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <StackPanel VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Name}" Foreground="White" FontSize="14"/>
+                                                        <TextBlock Text="{Binding Phone}" Foreground="#5a6580" FontSize="11"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="2" Text="{Binding VisitCount}"
+                                                           Foreground="#0a84ff" FontSize="16" FontWeight="Bold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="3" Text="{Binding LastVisit}"
+                                                           Foreground="#7a8090" FontSize="13"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="4" Text="{Binding TotalPaid}"
+                                                           Foreground="#00ff88" FontSize="14" FontWeight="SemiBold"
+                                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ═══════════════════ TAB 4: ALL TIME CLIENTS ═══════════════════ -->
+            <ScrollViewer x:Name="PanelAllTime" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel Margin="40,24,40,40">
+                    <Grid Margin="0,0,0,24">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="4" Height="22" CornerRadius="2" Margin="0,0,14,0"
+                                    Background="{StaticResource GradientCyanPurple}"/>
+                            <TextBlock Text="Рейтинг клієнтів за весь час" Foreground="White"
+                                       FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button Content="⬇ CSV" Style="{StaticResource ExportBtnGreen}"
+                                    Margin="0,0,10,0" Click="ExportAllTimeCSV_Click"/>
+                            <Button Content="⬇ Word" Style="{StaticResource ExportBtnBlue}"
+                                    Click="ExportAllTimeWord_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientCyanPurple}"/>
+                                    <TextBlock Text="Топ клієнти за кількістю візитів"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="AllTimeVisitsChart" Height="280" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientGreenCyan}"/>
+                                    <TextBlock Text="Топ клієнти за сумою оплат"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="AllTimeRevenueChart" Height="280" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                        Background="{StaticResource GradientPinkOrange}"/>
+                                <TextBlock Text="Повна таблиця — найактивніші клієнти за весь час"
+                                           Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <Border Background="#08ffffff" CornerRadius="10" Padding="16,12" Margin="0,0,0,8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="110"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="#" Foreground="#5a6580" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="1" Text="КЛІЄНТ" Foreground="#5a6580" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="2" Text="ВІЗИТІВ" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="АБОНЕМЕНТІВ" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="ПЕРША ВІЗИТА" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="5" Text="СУМА (₴)" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+                            <ItemsControl x:Name="AllTimeList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#10ffffff" BorderThickness="0,0,0,1" Padding="0,12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="40"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="90"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                    <ColumnDefinition Width="120"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Rank}" Foreground="#5a6580" FontSize="14" VerticalAlignment="Center"/>
+                                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border Width="36" Height="36" CornerRadius="18" Margin="0,0,12,0">
+                                                        <Border.Background>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                <GradientStop Color="#00f5ff" Offset="0"/>
+                                                                <GradientStop Color="#bf5af2" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Border.Background>
+                                                        <TextBlock Text="{Binding Initials}" Foreground="White"
+                                                                   FontSize="11" FontWeight="Bold"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <StackPanel VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Name}" Foreground="White" FontSize="14"/>
+                                                        <TextBlock Text="{Binding Phone}" Foreground="#5a6580" FontSize="11"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="2" Text="{Binding VisitCount}"
+                                                           Foreground="#0a84ff" FontSize="16" FontWeight="Bold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="3" Text="{Binding MembershipCount}"
+                                                           Foreground="#bf5af2" FontSize="14"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="4" Text="{Binding FirstVisit}"
+                                                           Foreground="#7a8090" FontSize="13"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="5" Text="{Binding TotalPaid}"
+                                                           Foreground="#00ff88" FontSize="14" FontWeight="SemiBold"
+                                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ═══════════════════ TAB 5: SESSIONS ═══════════════════ -->
+            <ScrollViewer x:Name="PanelSessions" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel Margin="40,24,40,40">
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="SesPeriodWeek" Content="Тиждень" Style="{StaticResource PeriodBtn}"
+                                         GroupName="SesPeriod" Margin="0,0,8,0" Checked="SesPeriod_Checked"/>
+                            <RadioButton x:Name="SesPeriodMonth" Content="Місяць" Style="{StaticResource PeriodBtn}"
+                                         GroupName="SesPeriod" Margin="0,0,8,0" IsChecked="True" Checked="SesPeriod_Checked"/>
+                            <RadioButton x:Name="SesPeriodQ" Content="Квартал" Style="{StaticResource PeriodBtn}"
+                                         GroupName="SesPeriod" Margin="0,0,8,0" Checked="SesPeriod_Checked"/>
+                            <RadioButton x:Name="SesPeriodYear" Content="Рік" Style="{StaticResource PeriodBtn}"
+                                         GroupName="SesPeriod" Margin="0,0,16,0" Checked="SesPeriod_Checked"/>
+                            <Border Background="#08ffffff" BorderBrush="#15ffffff" BorderThickness="1"
+                                    CornerRadius="10" Padding="14,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="з" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <DatePicker x:Name="SesDateFrom" FontSize="12" Width="120"
+                                                SelectedDateChanged="SesCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                    <TextBlock Text="по" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="10,0,8,0"/>
+                                    <DatePicker x:Name="SesDateTo" FontSize="12" Width="120"
+                                                SelectedDateChanged="SesCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="⬇ CSV" Style="{StaticResource ExportBtnGreen}"
+                                    Margin="0,0,10,0" Click="ExportSessionsCSV_Click"/>
+                            <Button Content="⬇ Word" Style="{StaticResource ExportBtnBlue}"
+                                    Click="ExportSessionsWord_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientCyanPurple}"/>
+                                    <TextBlock Text="Популярність сеансів"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="SesPopularChart" Height="280" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientGreenCyan}"/>
+                                    <TextBlock Text="Заповненість залу"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="SesFillChart" Height="280" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                        Background="{StaticResource GradientPinkOrange}"/>
+                                <TextBlock Text="Деталізація занять" Foreground="White"
+                                           FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <Border Background="#08ffffff" CornerRadius="10" Padding="16,12" Margin="0,0,0,8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="НАЗВА ЗАНЯТТЯ" Foreground="#5a6580" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="1" Text="ПРОВЕД." Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="УЧАСНИКІВ" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="ЗАПОВН." Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="ТРЕНД" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+                            <ItemsControl x:Name="SesDetailList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#10ffffff" BorderThickness="0,0,0,1" Padding="0,14">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="90"/>
+                                                    <ColumnDefinition Width="90"/>
+                                                    <ColumnDefinition Width="100"/>
+                                                    <ColumnDefinition Width="90"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Name}" Foreground="White" FontSize="14" FontWeight="SemiBold"/>
+                                                    <TextBlock Text="{Binding TrainerName}" Foreground="#5a6580" FontSize="11"/>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="1" Text="{Binding SessionCount}"
+                                                           Foreground="#9aa0b0" FontSize="14"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding TotalParticipants}"
+                                                           Foreground="#0a84ff" FontSize="14" FontWeight="SemiBold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <StackPanel Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding FillRateStr}" Foreground="{Binding FillColor}"
+                                                               FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                                    <Border Height="5" CornerRadius="3" Margin="0,5,0,0"
+                                                            Width="70" HorizontalAlignment="Center" Background="#15ffffff">
+                                                        <Border HorizontalAlignment="Left" Height="5" CornerRadius="3"
+                                                                Width="{Binding FillBarWidth}" Background="{Binding FillColor}"/>
+                                                    </Border>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="4" Text="{Binding Trend}"
+                                                           Foreground="{Binding TrendColor}" FontSize="14"
+                                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ═══════════════════ TAB 6: MEMBERSHIPS ═══════════════════ -->
+            <ScrollViewer x:Name="PanelMemberships" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel Margin="40,24,40,40">
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="MemPeriodWeek" Content="Тиждень" Style="{StaticResource PeriodBtn}"
+                                         GroupName="MemPeriod" Margin="0,0,8,0" Checked="MemPeriod_Checked"/>
+                            <RadioButton x:Name="MemPeriodMonth" Content="Місяць" Style="{StaticResource PeriodBtn}"
+                                         GroupName="MemPeriod" Margin="0,0,8,0" IsChecked="True" Checked="MemPeriod_Checked"/>
+                            <RadioButton x:Name="MemPeriodQ" Content="Квартал" Style="{StaticResource PeriodBtn}"
+                                         GroupName="MemPeriod" Margin="0,0,8,0" Checked="MemPeriod_Checked"/>
+                            <RadioButton x:Name="MemPeriodYear" Content="Рік" Style="{StaticResource PeriodBtn}"
+                                         GroupName="MemPeriod" Margin="0,0,16,0" Checked="MemPeriod_Checked"/>
+                            <Border Background="#08ffffff" BorderBrush="#15ffffff" BorderThickness="1"
+                                    CornerRadius="10" Padding="14,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="з" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <DatePicker x:Name="MemDateFrom" FontSize="12" Width="120"
+                                                SelectedDateChanged="MemCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                    <TextBlock Text="по" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="10,0,8,0"/>
+                                    <DatePicker x:Name="MemDateTo" FontSize="12" Width="120"
+                                                SelectedDateChanged="MemCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="⬇ CSV" Style="{StaticResource ExportBtnGreen}"
+                                    Margin="0,0,10,0" Click="ExportMembershipsCSV_Click"/>
+                            <Button Content="⬇ Word" Style="{StaticResource ExportBtnBlue}"
+                                    Click="ExportMembershipsWord_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientGreenCyan}"/>
+                                    <TextBlock Text="Продажі за типами абонементів"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="MemSalesChart" Height="260" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientCyanPurple}"/>
+                                    <TextBlock Text="Розподіл абонементів"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="MemPieChart" Height="260" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                        Background="{StaticResource GradientPinkOrange}"/>
+                                <TextBlock Text="Деталі по типах абонементів" Foreground="White"
+                                           FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <ItemsControl x:Name="MemDetailList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#10ffffff" BorderThickness="0,0,0,1" Padding="0,16">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="20"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="80"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Width="14" Height="14" CornerRadius="7"
+                                                        Background="{Binding AccentColor}" VerticalAlignment="Center">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Color="{Binding AccentColor}" BlurRadius="8" ShadowDepth="0" Opacity="0.6"/>
+                                                    </Border.Effect>
+                                                </Border>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0,0,0">
+                                                    <TextBlock Text="{Binding Name}" Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                                    <TextBlock Text="{Binding PriceStr}" Foreground="#5a6580" FontSize="12"/>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="2" Text="{Binding SoldCount}"
+                                                           Foreground="#9aa0b0" FontSize="16" FontWeight="Bold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="3" Text="{Binding Revenue}"
+                                                           Foreground="#00ff88" FontSize="14" FontWeight="SemiBold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="4" Text="{Binding ShareStr}"
+                                                           Foreground="#bf5af2" FontSize="14"
+                                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ═══════════════════ TAB 7: AVG LOAD ═══════════════════ -->
+            <ScrollViewer x:Name="PanelAvgLoad" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel Margin="40,24,40,40">
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="LdPeriodWeek" Content="Тиждень" Style="{StaticResource PeriodBtn}"
+                                         GroupName="LdPeriod" Margin="0,0,8,0" Checked="LdPeriod_Checked"/>
+                            <RadioButton x:Name="LdPeriodMonth" Content="Місяць" Style="{StaticResource PeriodBtn}"
+                                         GroupName="LdPeriod" Margin="0,0,8,0" IsChecked="True" Checked="LdPeriod_Checked"/>
+                            <RadioButton x:Name="LdPeriodQ" Content="Квартал" Style="{StaticResource PeriodBtn}"
+                                         GroupName="LdPeriod" Margin="0,0,8,0" Checked="LdPeriod_Checked"/>
+                            <RadioButton x:Name="LdPeriodYear" Content="Рік" Style="{StaticResource PeriodBtn}"
+                                         GroupName="LdPeriod" Margin="0,0,16,0" Checked="LdPeriod_Checked"/>
+                            <Border Background="#08ffffff" BorderBrush="#15ffffff" BorderThickness="1"
+                                    CornerRadius="10" Padding="14,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="з" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <DatePicker x:Name="LdDateFrom" FontSize="12" Width="120"
+                                                SelectedDateChanged="LdCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                    <TextBlock Text="по" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="10,0,8,0"/>
+                                    <DatePicker x:Name="LdDateTo" FontSize="12" Width="120"
+                                                SelectedDateChanged="LdCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="⬇ CSV" Style="{StaticResource ExportBtnGreen}"
+                                    Margin="0,0,10,0" Click="ExportLoadCSV_Click"/>
+                            <Button Content="⬇ Word" Style="{StaticResource ExportBtnBlue}"
+                                    Click="ExportLoadWord_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <UniformGrid Columns="3" Margin="0,0,0,24">
+                        <Border Margin="0,0,12,0" Style="{StaticResource StatCard}">
+                            <StackPanel>
+                                <TextBlock Text="Середня кількість людей" Foreground="#6a7590" FontSize="12"/>
+                                <TextBlock x:Name="LdKpiAvg" Text="0" Foreground="White"
+                                           FontSize="32" FontWeight="Bold" Margin="0,6,0,0"/>
+                                <TextBlock Text="на заняття за період" Foreground="#4a5570" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardGreen}">
+                            <StackPanel>
+                                <TextBlock Text="Пік завантаженості" Foreground="#40a070" FontSize="12"/>
+                                <TextBlock x:Name="LdKpiPeak" Text="0" Foreground="#00ff88"
+                                           FontSize="32" FontWeight="Bold" Margin="0,6,0,0"/>
+                                <TextBlock x:Name="LdKpiPeakDay" Text="" Foreground="#4a6070" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource KpiCardOrange}">
+                            <StackPanel>
+                                <TextBlock Text="Середня заповненість залу" Foreground="#c08040" FontSize="12"/>
+                                <TextBlock x:Name="LdKpiFill" Text="0%" Foreground="#ff9f0a"
+                                           FontSize="32" FontWeight="Bold" Margin="0,6,0,0"/>
+                                <TextBlock Text="від максимальної місткості" Foreground="#906850" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientCyanPurple}"/>
+                                    <TextBlock Text="Середня кількість людей по днях тижня"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="LdDowChart" Height="250" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientGreenCyan}"/>
+                                    <TextBlock Text="Динаміка завантаженості по місяцях"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="LdMonthChart" Height="250" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ═══════════════════ TAB 8: CANCELLATIONS ═══════════════════ -->
+            <ScrollViewer x:Name="PanelCancels" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                <StackPanel Margin="40,24,40,40">
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="CnlPeriodWeek" Content="Тиждень" Style="{StaticResource PeriodBtn}"
+                                         GroupName="CnlPeriod" Margin="0,0,8,0" Checked="CnlPeriod_Checked"/>
+                            <RadioButton x:Name="CnlPeriodMonth" Content="Місяць" Style="{StaticResource PeriodBtn}"
+                                         GroupName="CnlPeriod" Margin="0,0,8,0" IsChecked="True" Checked="CnlPeriod_Checked"/>
+                            <RadioButton x:Name="CnlPeriodQ" Content="Квартал" Style="{StaticResource PeriodBtn}"
+                                         GroupName="CnlPeriod" Margin="0,0,8,0" Checked="CnlPeriod_Checked"/>
+                            <RadioButton x:Name="CnlPeriodYear" Content="Рік" Style="{StaticResource PeriodBtn}"
+                                         GroupName="CnlPeriod" Margin="0,0,16,0" Checked="CnlPeriod_Checked"/>
+                            <Border Background="#08ffffff" BorderBrush="#15ffffff" BorderThickness="1"
+                                    CornerRadius="10" Padding="14,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="з" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <DatePicker x:Name="CnlDateFrom" FontSize="12" Width="120"
+                                                SelectedDateChanged="CnlCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                    <TextBlock Text="по" Foreground="#6a7590" FontSize="12" VerticalAlignment="Center" Margin="10,0,8,0"/>
+                                    <DatePicker x:Name="CnlDateTo" FontSize="12" Width="120"
+                                                SelectedDateChanged="CnlCustomDate_Changed"
+                                                Background="Transparent" BorderThickness="0" Foreground="#9aa0b0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="⬇ CSV" Style="{StaticResource ExportBtnGreen}"
+                                    Margin="0,0,10,0" Click="ExportCancelsCSV_Click"/>
+                            <Button Content="⬇ Word" Style="{StaticResource ExportBtnBlue}"
+                                    Click="ExportCancelsWord_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <UniformGrid Columns="4" Margin="0,0,0,24">
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardRed}">
+                            <StackPanel>
+                                <TextBlock Text="Скасованих абонементів" Foreground="#c04040" FontSize="12"/>
+                                <TextBlock x:Name="CnlKpiMemberships" Text="0" Foreground="#ff453a"
+                                           FontSize="30" FontWeight="Bold" Margin="0,6,0,0"/>
+                                <TextBlock Text="за обраний період" Foreground="#804545" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardOrange}">
+                            <StackPanel>
+                                <TextBlock Text="Скасованих сеансів" Foreground="#c08040" FontSize="12"/>
+                                <TextBlock x:Name="CnlKpiSessions" Text="0" Foreground="#ff9f0a"
+                                           FontSize="30" FontWeight="Bold" Margin="0,6,0,0"/>
+                                <TextBlock Text="скасовано тренерами / клієнтами" Foreground="#906850" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="0,0,12,0" Style="{StaticResource KpiCardRed}">
+                            <StackPanel>
+                                <TextBlock Text="Втрати від повернень" Foreground="#c04040" FontSize="12"/>
+                                <TextBlock x:Name="CnlKpiLost" Text="0 ₴" Foreground="#ff453a"
+                                           FontSize="26" FontWeight="Bold" Margin="0,6,0,0"/>
+                                <TextBlock Text="реальні втрачені кошти" Foreground="#804545" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource StatCard}">
+                            <StackPanel>
+                                <TextBlock Text="Відсоток скасувань" Foreground="#6a7590" FontSize="12"/>
+                                <TextBlock x:Name="CnlKpiRate" Text="0%" Foreground="#ff9f0a"
+                                           FontSize="30" FontWeight="Bold" Margin="0,6,0,0"/>
+                                <TextBlock Text="від загальної кількості" Foreground="#4a5570" FontSize="11"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,14,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientPinkOrange}"/>
+                                    <TextBlock Text="Скасування по місяцях"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="CnlTrendChart" Height="240" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                            Background="{StaticResource GradientCyanPurple}"/>
+                                    <TextBlock Text="Причини скасувань"
+                                               Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                                <oxy:PlotView x:Name="CnlReasonsChart" Height="240" Background="Transparent"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <Border Width="4" Height="18" CornerRadius="2" Margin="0,0,12,0"
+                                        Background="{StaticResource GradientPinkOrange}"/>
+                                <TextBlock Text="Деталізація скасувань" Foreground="White"
+                                           FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <Border Background="#08ffffff" CornerRadius="10" Padding="16,12" Margin="0,0,0,8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="110"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="ДАТА" Foreground="#5a6580" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="1" Text="КЛІЄНТ / ТИП" Foreground="#5a6580" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock Grid.Column="2" Text="КАТЕГОРІЯ" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="СТАТУС" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="ВТРАТИ" Foreground="#5a6580" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </Border>
+                            <ItemsControl x:Name="CnlDetailList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#10ffffff" BorderThickness="0,0,0,1" Padding="0,12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="120"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                    <ColumnDefinition Width="90"/>
+                                                    <ColumnDefinition Width="110"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding DateStr}" Foreground="#7a8090" FontSize="13" VerticalAlignment="Center"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding ClientName}" Foreground="White" FontSize="14"/>
+                                                    <TextBlock Text="{Binding TypeName}" Foreground="#5a6580" FontSize="11"/>
+                                                </StackPanel>
+                                                <Border Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                        Background="{Binding CategoryBg}" CornerRadius="8" Padding="10,5">
+                                                    <TextBlock Text="{Binding Category}" Foreground="{Binding CategoryFg}" FontSize="12"/>
+                                                </Border>
+                                                <Border Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                        Background="#25ff453a" CornerRadius="8" Padding="10,5">
+                                                    <TextBlock Text="Скасовано" Foreground="#ff453a" FontSize="12"/>
+                                                </Border>
+                                                <TextBlock Grid.Column="4" Text="{Binding LostAmount}"
+                                                           Foreground="#ff453a" FontSize="14" FontWeight="SemiBold"
+                                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+        </Grid>
+    </Grid>
+</Page>

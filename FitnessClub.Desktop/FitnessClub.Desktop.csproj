@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Services.ServiceHooks.WebApi" Version="19.225.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
+    <PackageReference Include="QRCoder" Version="1.7.0" />
+    <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.14" />
+  </ItemGroup>
+
+</Project>

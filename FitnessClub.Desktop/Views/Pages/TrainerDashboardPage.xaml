@@ -1,0 +1,1109 @@
+<Page x:Class="FitnessClub.Desktop.Views.Pages.TrainerDashboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#080b18">
+
+    <Grid Margin="28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock x:Name="GreetingText" Foreground="White" FontSize="26" FontWeight="Bold"/>
+                <TextBlock x:Name="DateText" Foreground="#4b5563" FontSize="12" Margin="0,3,0,0"/>
+            </StackPanel>
+            <Border x:Name="PendingBadge" Grid.Column="1" CornerRadius="10" Padding="12,6"
+                    Visibility="Collapsed" VerticalAlignment="Center" Cursor="Hand"
+                    MouseLeftButtonUp="PendingBadge_Click">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#7c3aed" Offset="0"/>
+                        <GradientStop Color="#6366f1" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="📲 " FontSize="14"/>
+                    <TextBlock x:Name="PendingCountText" Foreground="White" FontSize="13" FontWeight="Bold"/>
+                    <TextBlock Text=" нових запитів" Foreground="#c4b5fd" FontSize="13"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Статистика -->
+        <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,20">
+            <Border Margin="0,0,12,0" CornerRadius="14" Padding="18">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1a1744" Offset="0"/>
+                        <GradientStop Color="#2d1f6e" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel>
+                    <TextBlock Text="📅 Сьогодні" Foreground="#7c6fbf" FontSize="11"/>
+                    <TextBlock x:Name="TodayCountText" Text="0" Foreground="#a78bfa"
+                               FontSize="30" FontWeight="Bold" Margin="0,4,0,0"/>
+                    <TextBlock Text="занять" Foreground="#4b5563" FontSize="11"/>
+                </StackPanel>
+            </Border>
+            <Border Margin="0,0,12,0" CornerRadius="14" Padding="18">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#053d2e" Offset="0"/>
+                        <GradientStop Color="#065f46" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel>
+                    <TextBlock Text="✅ Цього місяця" Foreground="#2d8a6a" FontSize="11"/>
+                    <TextBlock x:Name="MonthCompletedText" Text="0" Foreground="#34d399"
+                               FontSize="30" FontWeight="Bold" Margin="0,4,0,0"/>
+                    <TextBlock Text="завершено" Foreground="#4b5563" FontSize="11"/>
+                </StackPanel>
+            </Border>
+            <Border Margin="0,0,12,0" CornerRadius="14" Padding="18">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#0f2a4a" Offset="0"/>
+                        <GradientStop Color="#1e40af" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel>
+                    <TextBlock Text="👥 Моїх клієнтів" Foreground="#3a6abf" FontSize="11"/>
+                    <TextBlock x:Name="TodayClientsText" Text="0" Foreground="#60a5fa"
+                               FontSize="30" FontWeight="Bold" Margin="0,4,0,0"/>
+                    <TextBlock Text="прив'язано" Foreground="#4b5563" FontSize="11"/>
+                </StackPanel>
+            </Border>
+            <Border CornerRadius="14" Padding="18">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#3d2a03" Offset="0"/>
+                        <GradientStop Color="#7c5a12" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel>
+                    <TextBlock Text="💰 Заробіток" Foreground="#a07a2d" FontSize="11"/>
+                    <TextBlock x:Name="MonthEarningsText" Text="0 ₴" Foreground="#f59e0b"
+                               FontSize="24" FontWeight="Bold" Margin="0,4,0,0"/>
+                    <TextBlock Text="за місяць" Foreground="#4b5563" FontSize="11"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+
+        <!-- Вкладки -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,16">
+            <Button x:Name="TabScheduleBtn" Content="📅 Розклад"
+                    Click="TabSchedule_Click" Height="34" Padding="16,0" Margin="0,0,8,0" Cursor="Hand">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#6C63FF"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                          Margin="{TemplateBinding Padding}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <!-- НОВА ВКЛАДКА: МОЇ КЛІЄНТИ -->
+            <Button x:Name="TabClientsBtn" Height="34" Padding="16,0" Margin="0,0,8,0" Cursor="Hand"
+                    Click="TabClients_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#1a1f35"/>
+                        <Setter Property="Foreground" Value="#9ca3af"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                          Margin="{TemplateBinding Padding}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#252b45"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="👥 Мої клієнти"/>
+                    <Border x:Name="ClientsBadge" CornerRadius="8" Padding="6,1" Margin="6,0,0,0"
+                            Background="#065f46" Visibility="Collapsed">
+                        <TextBlock x:Name="ClientsBadgeCount" Foreground="#34d399" FontSize="11" FontWeight="Bold"/>
+                    </Border>
+                </StackPanel>
+            </Button>
+
+            <Button x:Name="TabRequestsBtn" Height="34" Padding="16,0" Cursor="Hand"
+                    Click="TabRequests_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#1a1f35"/>
+                        <Setter Property="Foreground" Value="#9ca3af"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                          Margin="{TemplateBinding Padding}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#252b45"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="📲 Запити з Telegram"/>
+                    <Border x:Name="RequestsTabBadge" CornerRadius="8" Padding="6,1" Margin="6,0,0,0"
+                            Background="#7c3aed" Visibility="Collapsed">
+                        <TextBlock x:Name="RequestsTabCount" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                    </Border>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <!-- ══════════════════════════ ВКЛАДКА: РОЗКЛАД ══════════════════════════ -->
+        <Grid x:Name="ScheduleTab" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="380"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Список занять -->
+            <Border Grid.Column="0" Background="#0d1020" CornerRadius="16"
+                    BorderBrush="#1a1f35" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="20,16,20,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Мої заняття" Foreground="White"
+                                   FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        <Button x:Name="WeekBtn" Grid.Column="1" Content="На тиждень"
+                                Height="30" Padding="12,0" Margin="0,0,8,0"
+                                Cursor="Hand" Click="WeekView_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#1a1f35"/>
+                                    <Setter Property="Foreground" Value="#9ca3af"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="FontSize" Value="11"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                      Margin="{TemplateBinding Padding}"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#252b45"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="TodayBtn" Grid.Column="2" Content="Сьогодні"
+                                Height="30" Padding="12,0" Cursor="Hand" Click="TodayView_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#6C63FF"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="FontSize" Value="11"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                      Margin="{TemplateBinding Padding}"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#5a52e0"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="12,0,12,12">
+                        <ItemsControl x:Name="ScheduleList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,8" CornerRadius="12" Cursor="Hand"
+                                            MouseLeftButtonUp="Schedule_Click">
+                                        <Border.Background>
+                                            <SolidColorBrush Color="{Binding CardBg}"/>
+                                        </Border.Background>
+                                        <Border.BorderBrush>
+                                            <SolidColorBrush Color="{Binding CardBorder}"/>
+                                        </Border.BorderBrush>
+                                        <Border.BorderThickness>
+                                            <Thickness>1</Thickness>
+                                        </Border.BorderThickness>
+                                        <Grid Margin="14,10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="5"/>
+                                                <ColumnDefinition Width="70"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.Column="0" CornerRadius="3">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="{Binding AccentColor}"/>
+                                                </Border.Background>
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding StartTime}" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding EndTime}" Foreground="#6b7280" FontSize="11"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                    <TextBlock Text="{Binding ClassName}" Foreground="White" FontSize="13" FontWeight="SemiBold"/>
+                                                    <Border CornerRadius="5" Padding="6,2" Margin="8,0,0,0">
+                                                        <Border.Background>
+                                                            <SolidColorBrush Color="{Binding ClassTypeBadgeBg}"/>
+                                                        </Border.Background>
+                                                        <TextBlock FontSize="10" FontWeight="SemiBold" Text="{Binding ClassTypeLabel}">
+                                                            <TextBlock.Foreground>
+                                                                <SolidColorBrush Color="{Binding ClassTypeBadgeFg}"/>
+                                                            </TextBlock.Foreground>
+                                                        </TextBlock>
+                                                    </Border>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="📍" FontSize="10" Margin="0,0,4,0"/>
+                                                    <TextBlock Text="{Binding Room}" Foreground="#6b7280" FontSize="11"/>
+                                                    <TextBlock Text=" · " Foreground="#374151" FontSize="11"/>
+                                                    <TextBlock Text="{Binding Duration}" Foreground="#374151" FontSize="11"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                                <Border CornerRadius="8" Padding="10,5">
+                                                    <Border.Background>
+                                                        <SolidColorBrush Color="{Binding CounterBg}"/>
+                                                    </Border.Background>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding BookingsCount}" FontSize="16" FontWeight="Bold">
+                                                            <TextBlock.Foreground>
+                                                                <SolidColorBrush Color="{Binding AccentColor}"/>
+                                                            </TextBlock.Foreground>
+                                                        </TextBlock>
+                                                        <TextBlock Text="{Binding CapacityText}" Foreground="#4b5563"
+                                                                   FontSize="12" VerticalAlignment="Bottom" Margin="2,0,0,1"/>
+                                                    </StackPanel>
+                                                </Border>
+                                                <Button Content="+ Записати" Height="26" Margin="0,4,0,0"
+                                                        Cursor="Hand" Tag="{Binding Id}" Click="BookClient_Click">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Background" Value="#1e1b4b"/>
+                                                            <Setter Property="Foreground" Value="#a78bfa"/>
+                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                            <Setter Property="FontSize" Value="11"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="8,0">
+                                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#2d2a6e"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- Панель деталей -->
+            <Border Grid.Column="2" Background="#0d1020" CornerRadius="16"
+                    BorderBrush="#1a1f35" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="20,16,20,12">
+                        <TextBlock Text="Деталі заняття" Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="SelectedClassText" Text="Оберіть заняття зі списку"
+                                   Foreground="#4b5563" FontSize="12" Margin="0,4,0,0"/>
+                    </StackPanel>
+
+                    <Border Grid.Row="1" x:Name="CapacityPanel" Margin="16,0,16,12"
+                            Background="#131929" CornerRadius="12" Padding="16" Visibility="Collapsed">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,8">
+                                <TextBlock Text="Наповненість залу" Foreground="#6b7280" FontSize="11"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <TextBlock x:Name="BookedCountText" Text="0" Foreground="White" FontSize="18" FontWeight="Bold"/>
+                                    <TextBlock x:Name="MaxCountText" Text=" / 0" Foreground="#4b5563" FontSize="14"
+                                               VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Height="8" CornerRadius="4" Background="#1a1f35">
+                                <Border x:Name="CapacityBar" CornerRadius="4" HorizontalAlignment="Left" Width="0">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#6C63FF" Offset="0"/>
+                                            <GradientStop Color="#a78bfa" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
+                            </Border>
+                            <TextBlock x:Name="CapacityStatusText" FontSize="11" Margin="0,6,0,0" Foreground="#34d399"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="2" Margin="12,0,12,12">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Записані клієнти" Foreground="#6b7280"
+                                       FontSize="11" Margin="8,0,0,8"/>
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl x:Name="BookingsList">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#131929" CornerRadius="10" Margin="0,0,0,6" Padding="12,10">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="34"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Border Width="30" Height="30" CornerRadius="15">
+                                                        <Border.Background>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                <GradientStop Color="#1e1b4b" Offset="0"/>
+                                                                <GradientStop Color="#2d2a6e" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Border.Background>
+                                                        <TextBlock Text="{Binding Initials}" Foreground="#a78bfa"
+                                                                   FontSize="11" FontWeight="Bold"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding ClientName}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                                            <Border CornerRadius="4" Padding="5,1" Margin="5,0,0,0"
+                                                                    Visibility="{Binding TelegramBadgeVisibility}">
+                                                                <Border.Background>
+                                                                    <SolidColorBrush Color="#1a237e"/>
+                                                                </Border.Background>
+                                                                <TextBlock Text="TG" Foreground="#90caf9" FontSize="9" FontWeight="Bold"/>
+                                                            </Border>
+                                                        </StackPanel>
+                                                        <TextBlock Text="{Binding MembershipInfo}" FontSize="10" Margin="0,1,0,0">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Foreground" Value="#34d399"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding NeedsPayment}" Value="True">
+                                                                            <Setter Property="Foreground" Value="#f87171"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                    <TextBlock Grid.Column="2" Text="{Binding ChargeText}"
+                                                               Foreground="#f59e0b" FontSize="12" FontWeight="Bold"
+                                                               VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                                    <Button Grid.Column="3" Content="✕" Width="24" Height="24"
+                                                            Cursor="Hand" Tag="{Binding BookingId}" Click="CancelBooking_Click">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button">
+                                                                <Setter Property="Background" Value="#2d1f1f"/>
+                                                                <Setter Property="Foreground" Value="#f87171"/>
+                                                                <Setter Property="BorderThickness" Value="0"/>
+                                                                <Setter Property="FontSize" Value="10"/>
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="Button">
+                                                                            <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                            </Border>
+                                                                            <ControlTemplate.Triggers>
+                                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                                    <Setter Property="Background" Value="#4d1f1f"/>
+                                                                                </Trigger>
+                                                                            </ControlTemplate.Triggers>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                            <TextBlock x:Name="NoBookingsText" Grid.Row="1" Text="Немає записаних клієнтів"
+                                       Foreground="#374151" FontSize="12"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- ══════════════════════════ ВКЛАДКА: МОЇ КЛІЄНТИ ══════════════════════════ -->
+        <Grid x:Name="ClientsTab" Grid.Row="3" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="360"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Список клієнтів -->
+            <Border Grid.Column="0" Background="#0d1020" CornerRadius="16"
+                    BorderBrush="#1a1f35" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Заголовок + кнопка додати -->
+                    <Grid Grid.Row="0" Margin="20,16,20,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="8"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Мої клієнти" Foreground="White"
+                                       FontSize="15" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="ClientsSubtitle" Text="0 активних"
+                                       Foreground="#4b5563" FontSize="11" Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <!-- Фільтр активні/всі -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Border CornerRadius="8" Background="#1a1f35" Padding="2">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="FilterActiveBtn" Content="Активні"
+                                            Height="28" Padding="10,0" Cursor="Hand"
+                                            Click="FilterActive_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="#6C63FF"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="FontSize" Value="11"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                                  Margin="{TemplateBinding Padding}"/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button x:Name="FilterAllBtn" Content="Всі"
+                                            Height="28" Padding="10,0" Cursor="Hand"
+                                            Click="FilterAll_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="Foreground" Value="#9ca3af"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="FontSize" Value="11"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                                  Margin="{TemplateBinding Padding}"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Foreground" Value="White"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Кнопка прив'язати клієнта -->
+                        <Button Grid.Column="3" Content="＋ Прив'язати клієнта"
+                                Height="34" Padding="14,0" Cursor="Hand"
+                                Click="AddTrainerClient_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#065f46"/>
+                                    <Setter Property="Foreground" Value="#34d399"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="FontSize" Value="12"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                      Margin="{TemplateBinding Padding}"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#047857"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+
+                    <!-- Список -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="12,0,12,12">
+                        <ItemsControl x:Name="TrainerClientsList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,8" CornerRadius="14" Cursor="Hand"
+                                            MouseLeftButtonUp="TrainerClient_Click">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#131929"/>
+                                                <Setter Property="BorderThickness" Value="1"/>
+                                                <Setter Property="BorderBrush" Value="#1a1f35"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsOverdue}" Value="True">
+                                                        <Setter Property="BorderBrush" Value="#7f1d1d"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                        <Setter Property="Opacity" Value="0.5"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Grid Margin="14,12">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="44"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Аватар -->
+                                            <Border Width="40" Height="40" CornerRadius="20">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                        <GradientStop Color="#1e1b4b" Offset="0"/>
+                                                        <GradientStop Color="#312e81" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <TextBlock Text="{Binding Initials}" Foreground="#a78bfa"
+                                                           FontSize="14" FontWeight="Bold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <!-- Інфо -->
+                                            <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                                    <TextBlock Text="{Binding ClientName}" Foreground="White"
+                                                               FontSize="13" FontWeight="SemiBold"/>
+                                                    <!-- Бейдж типу оплати -->
+                                                    <Border CornerRadius="6" Padding="6,2" Margin="8,0,0,0">
+                                                        <Border.Style>
+                                                            <Style TargetType="Border">
+                                                                <Setter Property="Background" Value="#1e1b4b"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding PaymentType}" Value="weekly">
+                                                                        <Setter Property="Background" Value="#0c2a4a"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding PaymentType}" Value="monthly">
+                                                                        <Setter Property="Background" Value="#064e3b"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <TextBlock Text="{Binding PaymentTypeLabel}" FontSize="10" FontWeight="SemiBold">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Foreground" Value="#a78bfa"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding PaymentType}" Value="weekly">
+                                                                            <Setter Property="Foreground" Value="#60a5fa"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding PaymentType}" Value="monthly">
+                                                                            <Setter Property="Foreground" Value="#34d399"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </Border>
+                                                    <!-- Прострочено -->
+                                                    <Border CornerRadius="6" Padding="6,2" Margin="4,0,0,0"
+                                                            Background="#7f1d1d"
+                                                            Visibility="{Binding OverdueBadgeVisibility}">
+                                                        <TextBlock Text="⚠ Прострочено" Foreground="#fca5a5"
+                                                                   FontSize="10" FontWeight="SemiBold"/>
+                                                    </Border>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="📞 " FontSize="10" Foreground="#4b5563"/>
+                                                    <TextBlock Text="{Binding ClientPhone}" Foreground="#6b7280" FontSize="11"/>
+                                                    <TextBlock Text="  ·  Ставка: " Foreground="#374151" FontSize="11"/>
+                                                    <TextBlock Text="{Binding RateText}" Foreground="#f59e0b"
+                                                               FontSize="11" FontWeight="SemiBold"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                                    <TextBlock Text="💰 Сплачено: " Foreground="#374151" FontSize="11"/>
+                                                    <TextBlock Text="{Binding TotalPaidText}" Foreground="#34d399"
+                                                               FontSize="11" FontWeight="SemiBold"/>
+                                                    <TextBlock Text="  ·  " Foreground="#374151" FontSize="11"/>
+                                                    <TextBlock Text="{Binding NextPaymentText}" FontSize="11">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Foreground" Value="#9ca3af"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsOverdue}" Value="True">
+                                                                        <Setter Property="Foreground" Value="#f87171"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Дії -->
+                                            <StackPanel Grid.Column="2" VerticalAlignment="Center"
+                                                        Orientation="Horizontal">
+                                                <!-- Прийняти оплату -->
+                                                <Button Content="💳 Оплата" Height="30" Padding="10,0"
+                                                        Margin="0,0,6,0" Cursor="Hand"
+                                                        Tag="{Binding Id}" Click="PayTrainerClient_Click">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Background" Value="#065f46"/>
+                                                            <Setter Property="Foreground" Value="#34d399"/>
+                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                            <Setter Property="FontSize" Value="11"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                                              Margin="{TemplateBinding Padding}"/>
+                                                                        </Border>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#047857"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                                <!-- Завершити прив'язку -->
+                                                <Button Content="✕" Width="30" Height="30"
+                                                        Cursor="Hand" Tag="{Binding Id}"
+                                                        Click="DeactivateTrainerClient_Click">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Background" Value="#2d1f1f"/>
+                                                            <Setter Property="Foreground" Value="#f87171"/>
+                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                            <Setter Property="FontSize" Value="11"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#4d1f1f"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- Права панель: деталі клієнта + історія платежів -->
+            <Border Grid.Column="2" Background="#0d1020" CornerRadius="16"
+                    BorderBrush="#1a1f35" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Заголовок -->
+                    <StackPanel Grid.Row="0" Margin="20,16,20,12">
+                        <TextBlock Text="Деталі клієнта" Foreground="White"
+                                   FontSize="15" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="SelectedClientName" Text="Оберіть клієнта зі списку"
+                                   Foreground="#4b5563" FontSize="12" Margin="0,4,0,0"/>
+                    </StackPanel>
+
+                    <!-- KPI картки по вибраному клієнту -->
+                    <Border x:Name="ClientDetailPanel" Grid.Row="1" Margin="16,0,16,12"
+                            Visibility="Collapsed">
+                        <StackPanel>
+                            <UniformGrid Columns="2" Margin="0,0,0,8">
+                                <Border Background="#131929" CornerRadius="10" Padding="12,10" Margin="0,0,4,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Тип оплати" Foreground="#4b5563" FontSize="10"/>
+                                        <TextBlock x:Name="DetailPaymentType" Text="—"
+                                                   Foreground="#a78bfa" FontSize="14" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Background="#131929" CornerRadius="10" Padding="12,10" Margin="4,0,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Ставка" Foreground="#4b5563" FontSize="10"/>
+                                        <TextBlock x:Name="DetailRate" Text="—"
+                                                   Foreground="#f59e0b" FontSize="14" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Border>
+                            </UniformGrid>
+                            <UniformGrid Columns="2">
+                                <Border Background="#131929" CornerRadius="10" Padding="12,10" Margin="0,0,4,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Всього сплачено" Foreground="#4b5563" FontSize="10"/>
+                                        <TextBlock x:Name="DetailTotalPaid" Text="0 ₴"
+                                                   Foreground="#34d399" FontSize="14" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Background="#131929" CornerRadius="10" Padding="12,10" Margin="4,0,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Платежів" Foreground="#4b5563" FontSize="10"/>
+                                        <TextBlock x:Name="DetailPaymentCount" Text="0"
+                                                   Foreground="#60a5fa" FontSize="14" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Border>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Список платежів -->
+                    <Border Grid.Row="2" Margin="12,0,12,12">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Історія платежів" Foreground="#6b7280"
+                                       FontSize="11" Margin="8,0,0,8"/>
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl x:Name="ClientPaymentsList">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#131929" CornerRadius="10"
+                                                    Margin="0,0,0,6" Padding="12,10">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Note}" Foreground="White"
+                                                                   FontSize="12" FontWeight="SemiBold"/>
+                                                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                                            <TextBlock Text="{Binding PaidAtStr}" Foreground="#6b7280" FontSize="10"/>
+                                                            <TextBlock Text=" · " Foreground="#374151" FontSize="10"/>
+                                                            <TextBlock Text="{Binding PaymentMethod}" Foreground="#4b5563" FontSize="10"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                    <TextBlock Grid.Column="1" Text="{Binding AmountStr}"
+                                                               Foreground="#34d399" FontSize="14" FontWeight="Bold"
+                                                               VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                            <TextBlock x:Name="NoPaymentsText" Grid.Row="1"
+                                       Text="Оберіть клієнта для перегляду платежів"
+                                       Foreground="#374151" FontSize="12"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- ══════════════════════════ ВКЛАДКА: ЗАПИТИ З TELEGRAM ══════════════════════════ -->
+        <Border x:Name="RequestsTab" Grid.Row="3" Background="#0d1020"
+                CornerRadius="16" BorderBrush="#1a1f35" BorderThickness="1"
+                Visibility="Collapsed">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="20,16,20,12">
+                    <StackPanel>
+                        <TextBlock Text="📲 Запити на бронювання з Telegram"
+                                   Foreground="White" FontSize="15" FontWeight="SemiBold"/>
+                        <TextBlock Text="Підтвердіть або відхиліть запити клієнтів"
+                                   Foreground="#4b5563" FontSize="12" Margin="0,3,0,0"/>
+                    </StackPanel>
+                    <Button Content="🔄 Оновити" HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Height="30" Padding="12,0" Cursor="Hand" Click="RefreshRequests_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#1a1f35"/>
+                                <Setter Property="Foreground" Value="#9ca3af"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="FontSize" Value="11"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                  Margin="{TemplateBinding Padding}"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#252b45"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="16,0,16,16">
+                    <StackPanel>
+                        <ItemsControl x:Name="PendingRequestsList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#131929" CornerRadius="14" Margin="0,0,0,10" Padding="18,14">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="44"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="40" Height="40" CornerRadius="20">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                        <GradientStop Color="#1a237e" Offset="0"/>
+                                                        <GradientStop Color="#283593" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <TextBlock Text="{Binding Initials}" Foreground="#90caf9"
+                                                           FontSize="14" FontWeight="Bold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Margin="12,0,16,0" VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding ClientName}" Foreground="White"
+                                                               FontSize="14" FontWeight="SemiBold"/>
+                                                    <Border CornerRadius="5" Padding="6,2" Margin="8,0,0,0" Background="#1a237e">
+                                                        <TextBlock Text="📲 Telegram" Foreground="#90caf9" FontSize="10" FontWeight="Bold"/>
+                                                    </Border>
+                                                </StackPanel>
+                                                <TextBlock Margin="0,4,0,0">
+                                                    <TextBlock.Inlines>
+                                                        <Run Text="🏋️ " FontSize="12"/>
+                                                        <Run Text="{Binding ClassName}" Foreground="#a78bfa" FontSize="12" FontWeight="SemiBold"/>
+                                                    </TextBlock.Inlines>
+                                                </TextBlock>
+                                                <TextBlock Margin="0,2,0,0">
+                                                    <TextBlock.Inlines>
+                                                        <Run Text="📅 " FontSize="11"/>
+                                                        <Run Text="{Binding ScheduleDateStr}" Foreground="#9ca3af" FontSize="11"/>
+                                                        <Run Text="  🕐 " FontSize="11"/>
+                                                        <Run Text="{Binding TimeStr}" Foreground="#9ca3af" FontSize="11"/>
+                                                    </TextBlock.Inlines>
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding ClientPhone}" Foreground="#4b5563" FontSize="10" Margin="0,2,0,0"/>
+                                                <TextBlock Foreground="#374151" FontSize="10" Margin="0,2,0,0">
+                                                    <TextBlock.Inlines>
+                                                        <Run Text="Запит: "/>
+                                                        <Run Text="{Binding BookedAtStr}"/>
+                                                    </TextBlock.Inlines>
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Width="130">
+                                                <Button Content="✅ Підтвердити" Height="34"
+                                                        Cursor="Hand" Tag="{Binding Id}"
+                                                        Click="ApproveBooking_Click" Margin="0,0,0,6">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Background" Value="#064e3b"/>
+                                                            <Setter Property="Foreground" Value="#34d399"/>
+                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                            <Setter Property="FontSize" Value="12"/>
+                                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#065f46"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                                <Button Content="❌ Відхилити" Height="34"
+                                                        Cursor="Hand" Tag="{Binding Id}"
+                                                        Click="RejectBooking_Click">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Background" Value="#4c0519"/>
+                                                            <Setter Property="Foreground" Value="#f87171"/>
+                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                            <Setter Property="FontSize" Value="12"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#7f1d1d"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <StackPanel x:Name="NoPendingText" HorizontalAlignment="Center"
+                                    Margin="0,60,0,0" Visibility="Collapsed">
+                            <TextBlock Text="✅" FontSize="48" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Нових запитів немає" Foreground="#4b5563"
+                                       FontSize="16" HorizontalAlignment="Center" Margin="0,12,0,0"/>
+                            <TextBlock Text="Всі запити оброблено" Foreground="#374151"
+                                       FontSize="12" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

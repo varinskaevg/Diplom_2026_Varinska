@@ -1,0 +1,828 @@
+<Page x:Class="FitnessClub.Desktop.Views.Pages.SchedulePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#080B14">
+
+    <Page.Resources>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             СТИЛІ КНОПОК НАВІГАЦІЇ
+        ══════════════════════════════════════════════════════════════ -->
+        <Style x:Key="NavBtn" TargetType="Button">
+            <Setter Property="Background"      Value="#0C0F1E"/>
+            <Setter Property="Foreground"      Value="#4A5070"/>
+            <Setter Property="BorderBrush"     Value="#181E34"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontFamily"      Value="Segoe UI"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="9">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background"  Value="#141828"/>
+                                <Setter Property="Foreground"  Value="#A78BFA"/>
+                                <Setter Property="BorderBrush" Value="#3730A3"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#1E2240"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Активний перемикач -->
+        <Style x:Key="ViewToggleActive" TargetType="Button">
+            <Setter Property="Foreground"      Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily"      Value="Segoe UI"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bg" CornerRadius="8">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#5046C8" Offset="0"/>
+                                    <GradientStop Color="#7B6FD0" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#6C63FF" BlurRadius="14"
+                                                  ShadowDepth="0" Opacity="0.45"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Неактивний перемикач -->
+        <Style x:Key="ViewToggleIdle" TargetType="Button">
+            <Setter Property="Background"      Value="Transparent"/>
+            <Setter Property="Foreground"      Value="#3D4468"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily"      Value="Segoe UI"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#141828"/>
+                                <Setter Property="Foreground" Value="#7C6FCD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Кнопка "Додати" -->
+        <Style x:Key="AddButton" TargetType="Button">
+            <Setter Property="Foreground"      Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily"      Value="Segoe UI"/>
+            <Setter Property="FontSize"        Value="13"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bg" CornerRadius="11"
+                                Padding="{TemplateBinding Padding}">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#5046C8" Offset="0"/>
+                                    <GradientStop Color="#7B6FD0" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#6C63FF" BlurRadius="20"
+                                                  ShadowDepth="0" Opacity="0.5"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bg" Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Іконкова кнопка (редагувати) -->
+        <Style x:Key="IconBtn" TargetType="Button">
+            <Setter Property="Background"      Value="#0C0F1E"/>
+            <Setter Property="Foreground"      Value="#3A4070"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width"           Value="28"/>
+            <Setter Property="Height"          Value="28"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1A2040"/>
+                                <Setter Property="Foreground" Value="#A78BFA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Кнопка видалення -->
+        <Style x:Key="DelBtn" TargetType="Button">
+            <Setter Property="Background"      Value="#180A0A"/>
+            <Setter Property="Foreground"      Value="#6B2A2A"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width"           Value="28"/>
+            <Setter Property="Height"          Value="28"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2D1010"/>
+                                <Setter Property="Foreground" Value="#F87171"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Стиль ScrollBar -->
+        <Style x:Key="ThinScrollBar" TargetType="ScrollBar">
+            <Setter Property="Width" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Border Background="#0C0F1E" CornerRadius="3">
+                            <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                <Track.Thumb>
+                                    <Thumb>
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border Background="#2E2A7A" CornerRadius="3"
+                                                        Margin="1"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+
+    <Grid Margin="30,24,30,24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- 0: Заголовок -->
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="Auto"/>
+            <!-- 2: Статистика -->
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="Auto"/>
+            <!-- 4: Навігація -->
+            <RowDefinition Height="14"/>
+            <RowDefinition Height="Auto"/>
+            <!-- 6: Легенда -->
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+            <!-- 8: Контент -->
+        </Grid.RowDefinitions>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             0: ЗАГОЛОВОК
+        ══════════════════════════════════════════════════════════════ -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="Розклад занять"
+                           Foreground="#E8E4FF"
+                           FontFamily="Segoe UI"
+                           FontSize="26" FontWeight="Bold"/>
+                <TextBlock x:Name="SubtitleText"
+                           Foreground="#2A2F50"
+                           FontFamily="Segoe UI"
+                           FontSize="12" Margin="2,4,0,0"/>
+            </StackPanel>
+
+            <Button x:Name="AddBtn" Grid.Column="1"
+                    Height="40" Padding="20,0"
+                    Style="{StaticResource AddButton}"
+                    VerticalAlignment="Center"
+                    Visibility="Collapsed"
+                    Click="AddSchedule_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="+" Foreground="White" FontSize="16" FontWeight="Bold"
+                               Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Додати заняття" Foreground="White"
+                               FontFamily="Segoe UI" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             2: СТАТИСТИКА — 4 картки з реальними binding-полями
+        ══════════════════════════════════════════════════════════════ -->
+        <UniformGrid Grid.Row="2" Rows="1" Columns="4">
+
+            <!-- Всього занять -->
+            <Border Margin="0,0,10,0" CornerRadius="14"
+                    Background="#0A0D1A" BorderBrush="#141828" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect Color="#000" BlurRadius="16" ShadowDepth="0" Opacity="0.4"/>
+                </Border.Effect>
+                <Grid Margin="18,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Всього занять"
+                                   Foreground="#3A4068" FontFamily="Segoe UI" FontSize="11"/>
+                        <TextBlock x:Name="StatTotal" Text="0"
+                                   Foreground="#E8E4FF" FontFamily="Segoe UI"
+                                   FontSize="30" FontWeight="Bold" Margin="0,4,0,0"/>
+                        <TextBlock Text="у поточному місяці"
+                                   Foreground="#1E2240" FontFamily="Segoe UI" FontSize="10"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Width="44" Height="44" CornerRadius="12"
+                            VerticalAlignment="Center">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1E1B4B" Offset="0"/>
+                                <GradientStop Color="#312E81" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <TextBlock Text="&#128197;" FontSize="20"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Заплановано -->
+            <Border Margin="5,0,5,0" CornerRadius="14"
+                    Background="#0A0D1A" BorderBrush="#141828" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect Color="#000" BlurRadius="16" ShadowDepth="0" Opacity="0.4"/>
+                </Border.Effect>
+                <Grid Margin="18,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Заплановано"
+                                   Foreground="#3A4068" FontFamily="Segoe UI" FontSize="11"/>
+                        <TextBlock x:Name="StatScheduled" Text="0"
+                                   Foreground="#A78BFA" FontFamily="Segoe UI"
+                                   FontSize="30" FontWeight="Bold" Margin="0,4,0,0"/>
+                        <TextBlock Text="очікують проведення"
+                                   Foreground="#1E2240" FontFamily="Segoe UI" FontSize="10"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Width="44" Height="44" CornerRadius="12"
+                            VerticalAlignment="Center">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1E1B4B" Offset="0"/>
+                                <GradientStop Color="#4338CA" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <TextBlock Text="&#9200;" FontSize="20"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Завершено -->
+            <Border Margin="5,0,5,0" CornerRadius="14"
+                    Background="#0A0D1A" BorderBrush="#141828" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect Color="#000" BlurRadius="16" ShadowDepth="0" Opacity="0.4"/>
+                </Border.Effect>
+                <Grid Margin="18,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Завершено"
+                                   Foreground="#3A4068" FontFamily="Segoe UI" FontSize="11"/>
+                        <TextBlock x:Name="StatCompleted" Text="0"
+                                   Foreground="#34D399" FontFamily="Segoe UI"
+                                   FontSize="30" FontWeight="Bold" Margin="0,4,0,0"/>
+                        <TextBlock Text="успішно проведено"
+                                   Foreground="#1E2240" FontFamily="Segoe UI" FontSize="10"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Width="44" Height="44" CornerRadius="12"
+                            VerticalAlignment="Center">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#052E16" Offset="0"/>
+                                <GradientStop Color="#166534" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <TextBlock Text="&#10003;" FontSize="20" FontWeight="Bold"
+                                   Foreground="#34D399"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Скасовано -->
+            <Border Margin="10,0,0,0" CornerRadius="14"
+                    Background="#0A0D1A" BorderBrush="#141828" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect Color="#000" BlurRadius="16" ShadowDepth="0" Opacity="0.4"/>
+                </Border.Effect>
+                <Grid Margin="18,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Скасовано"
+                                   Foreground="#3A4068" FontFamily="Segoe UI" FontSize="11"/>
+                        <TextBlock x:Name="StatCancelled" Text="0"
+                                   Foreground="#F87171" FontFamily="Segoe UI"
+                                   FontSize="30" FontWeight="Bold" Margin="0,4,0,0"/>
+                        <TextBlock Text="не відбулось"
+                                   Foreground="#1E2240" FontFamily="Segoe UI" FontSize="10"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Width="44" Height="44" CornerRadius="12"
+                            VerticalAlignment="Center">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#450A0A" Offset="0"/>
+                                <GradientStop Color="#7F1D1D" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <TextBlock Text="&#10005;" FontSize="18" FontWeight="Bold"
+                                   Foreground="#F87171"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </UniformGrid>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             4: НАВІГАЦІЯ
+        ══════════════════════════════════════════════════════════════ -->
+        <Border Grid.Row="4"
+                Background="#0A0D1A" BorderBrush="#141828"
+                BorderThickness="1" CornerRadius="12" Padding="12,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Content="&#9664;" Width="34" Height="34"
+                        Style="{StaticResource NavBtn}" Click="Prev_Click"/>
+
+                <TextBlock Grid.Column="1" x:Name="CurrentDateText"
+                           Foreground="#C4BFEE" FontFamily="Segoe UI"
+                           FontSize="14" FontWeight="SemiBold"
+                           VerticalAlignment="Center" Margin="12,0"/>
+
+                <Button Grid.Column="2" Content="&#9654;" Width="34" Height="34"
+                        Style="{StaticResource NavBtn}" Click="Next_Click"/>
+
+                <Button Grid.Column="3" Content="Сьогодні"
+                        Height="34" Width="90" Margin="8,0,0,0"
+                        Click="Today_Click">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
+                            <Setter Property="Foreground" Value="#7C6FCD"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Border Grid.Column="5" Background="#0C0F1E"
+                        CornerRadius="10" Padding="3">
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="DayViewBtn" Content="День"
+                                Height="30" Width="70"
+                                Style="{StaticResource ViewToggleActive}"
+                                Click="DayView_Click"/>
+                        <Button x:Name="WeekViewBtn" Content="Тиждень"
+                                Height="30" Width="90"
+                                Style="{StaticResource ViewToggleIdle}"
+                                Click="WeekView_Click"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             6: ЛЕГЕНДА
+        ══════════════════════════════════════════════════════════════ -->
+        <StackPanel Grid.Row="6" Orientation="Horizontal">
+            <Border Background="#10122A" CornerRadius="7" Padding="10,5" Margin="0,0,6,0">
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse Width="6" Height="6" Margin="0,0,7,0" VerticalAlignment="Center"
+                             Fill="#6C63FF"/>
+                    <TextBlock Text="Заплановано" Foreground="#4A46A0"
+                               FontFamily="Segoe UI" FontSize="11"/>
+                </StackPanel>
+            </Border>
+            <Border Background="#0A1A12" CornerRadius="7" Padding="10,5" Margin="0,0,6,0">
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse Width="6" Height="6" Margin="0,0,7,0" VerticalAlignment="Center"
+                             Fill="#34D399"/>
+                    <TextBlock Text="Завершено" Foreground="#1D5E44"
+                               FontFamily="Segoe UI" FontSize="11"/>
+                </StackPanel>
+            </Border>
+            <Border Background="#1A0A0A" CornerRadius="7" Padding="10,5" Margin="0,0,14,0">
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse Width="6" Height="6" Margin="0,0,7,0" VerticalAlignment="Center"
+                             Fill="#F87171"/>
+                    <TextBlock Text="Скасовано" Foreground="#6B2A2A"
+                               FontFamily="Segoe UI" FontSize="11"/>
+                </StackPanel>
+            </Border>
+            <Border Width="1" Background="#141828" Margin="0,4,14,4"/>
+            <Border Background="#0C1424" CornerRadius="7" Padding="10,5" Margin="0,0,6,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#128100;" FontSize="10" Margin="0,0,6,0"/>
+                    <TextBlock Text="Індивідуальне" Foreground="#2A4870"
+                               FontFamily="Segoe UI" FontSize="11"/>
+                </StackPanel>
+            </Border>
+            <Border Background="#14082A" CornerRadius="7" Padding="10,5">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#128101;" FontSize="10" Margin="0,0,6,0"/>
+                    <TextBlock Text="Групове" Foreground="#4A2870"
+                               FontFamily="Segoe UI" FontSize="11"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             8: ДЕНЬ — НОВИЙ ДИЗАЙН КАРТОК (Timeline-стиль)
+        ══════════════════════════════════════════════════════════════ -->
+        <ScrollViewer x:Name="DayPanel" Grid.Row="8"
+                      VerticalScrollBarVisibility="Auto">
+            <ScrollViewer.Resources>
+                <Style TargetType="ScrollBar" BasedOn="{StaticResource ThinScrollBar}"/>
+            </ScrollViewer.Resources>
+            <ItemsControl x:Name="ScheduleList" Margin="0,0,8,0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+
+                        <!--
+                            НОВА КАРТКА: двопанельний layout
+                            LEFT  — вузька панель з часом + вертикальна лінія
+                            RIGHT — широка картка з усіма деталями
+                        -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="72"/>
+                                <!-- Час -->
+                                <ColumnDefinition Width="18"/>
+                                <!-- Timeline-лінія -->
+                                <ColumnDefinition Width="*"/>
+                                <!-- Картка -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- ── Ліва панель: час ── -->
+                            <StackPanel Grid.Column="0"
+                                        VerticalAlignment="Top" Margin="0,14,0,0">
+                                <TextBlock Text="{Binding StartTime}"
+                                           Foreground="#E8E4FF"
+                                           FontFamily="Segoe UI"
+                                           FontSize="18" FontWeight="Bold"
+                                           HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding EndTime}"
+                                           Foreground="#2A3060"
+                                           FontFamily="Segoe UI"
+                                           FontSize="10"
+                                           HorizontalAlignment="Right"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <!-- ── Середня: крапка + лінія таймлайну ── -->
+                            <Grid Grid.Column="1" VerticalAlignment="Stretch">
+                                <!-- вертикальна лінія -->
+                                <Border HorizontalAlignment="Center"
+                                        Width="2" Background="#141828"
+                                        Margin="0,18,0,0"/>
+                                <!-- крапка (колір = AccentColor) -->
+                                <Ellipse Width="12" Height="12"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Top"
+                                         Margin="0,18,0,0">
+                                    <Ellipse.Fill>
+                                        <SolidColorBrush Color="{Binding AccentColor}"/>
+                                    </Ellipse.Fill>
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect Color="{Binding AccentColor}"
+                                                          BlurRadius="8" ShadowDepth="0"
+                                                          Opacity="0.7"/>
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </Grid>
+
+                            <!-- ── Права картка ── -->
+                            <Border Grid.Column="2"
+                                    CornerRadius="14" BorderThickness="1"
+                                    Cursor="Hand"
+                                    MouseLeftButtonUp="ScheduleItem_Click">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{Binding CardBg}"/>
+                                </Border.Background>
+                                <Border.BorderBrush>
+                                    <SolidColorBrush Color="{Binding CardBorder}"/>
+                                </Border.BorderBrush>
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#000" BlurRadius="16"
+                                                      ShadowDepth="0" Opacity="0.35"/>
+                                </Border.Effect>
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <!-- Верхній рядок: назва + бейдж + статус + дії -->
+                                        <RowDefinition Height="1"/>
+                                        <!-- Роздільник -->
+                                        <RowDefinition Height="Auto"/>
+                                        <!-- Нижній рядок: тренер | зал | учасники | тривалість -->
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Акцентна ліва смужка -->
+                                    <Border Grid.RowSpan="3"
+                                            Width="4" HorizontalAlignment="Left"
+                                            CornerRadius="14,0,0,14">
+                                        <Border.Background>
+                                            <SolidColorBrush Color="{Binding AccentColor}"/>
+                                        </Border.Background>
+                                    </Border>
+
+                                    <!-- ── Верхній рядок ── -->
+                                    <Grid Grid.Row="0" Margin="18,14,14,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Назва + тип-бейдж -->
+                                        <StackPanel Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding ClassName}"
+                                                       Foreground="#E8E4FF"
+                                                       FontFamily="Segoe UI"
+                                                       FontSize="15" FontWeight="SemiBold"
+                                                       VerticalAlignment="Center"/>
+                                            <!-- Тип-бейдж -->
+                                            <Border CornerRadius="6" Padding="9,4"
+                                                    Margin="10,0,0,0" VerticalAlignment="Center">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="{Binding ClassTypeBadgeBg}"/>
+                                                </Border.Background>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding ClassTypeIcon}"
+                                                               FontSize="9" Margin="0,0,4,0"/>
+                                                    <TextBlock Text="{Binding ClassTypeLabel}"
+                                                               FontFamily="Segoe UI"
+                                                               FontSize="9" FontWeight="SemiBold">
+                                                        <TextBlock.Foreground>
+                                                            <SolidColorBrush Color="{Binding ClassTypeBadgeFg}"/>
+                                                        </TextBlock.Foreground>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+
+                                        <!-- Статус-бейдж -->
+                                        <Border Grid.Column="1" CornerRadius="8"
+                                                Padding="12,5" VerticalAlignment="Center"
+                                                Margin="0,0,10,0">
+                                            <Border.Background>
+                                                <SolidColorBrush Color="{Binding StatusBg}"/>
+                                            </Border.Background>
+                                            <TextBlock Text="{Binding StatusUa}"
+                                                       FontFamily="Segoe UI"
+                                                       FontSize="10" FontWeight="SemiBold">
+                                                <TextBlock.Foreground>
+                                                    <SolidColorBrush Color="{Binding StatusFg}"/>
+                                                </TextBlock.Foreground>
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!-- Кнопки дій -->
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <Button Content="&#9998;"
+                                                    Style="{StaticResource IconBtn}"
+                                                    ToolTip="Редагувати"
+                                                    Tag="{Binding Id}"
+                                                    Click="EditSchedule_Click"
+                                                    Visibility="{Binding EditVisible}"/>
+                                            <Button Content="&#128465;"
+                                                    Style="{StaticResource DelBtn}"
+                                                    ToolTip="Видалити"
+                                                    Margin="5,0,0,0"
+                                                    Tag="{Binding Id}"
+                                                    Click="DeleteSchedule_Click"
+                                                    Visibility="{Binding EditVisible}"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- ── Горизонтальний роздільник ── -->
+                                    <Border Grid.Row="1" Height="1"
+                                            Background="#141828" Margin="18,0"/>
+
+                                    <!-- ── Нижній рядок: 4 блоки інформації ── -->
+                                    <Grid Grid.Row="2" Margin="18,10,14,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="1"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="1"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="1"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Тренер -->
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="ТРЕНЕР"
+                                                       Foreground="#1E2240"
+                                                       FontFamily="Segoe UI"
+                                                       FontSize="9" FontWeight="Medium"
+                                                       Margin="0,0,0,5"/>
+                                            <TextBlock Text="{Binding TrainerName}"
+                                                       Foreground="#8890C0"
+                                                       FontFamily="Segoe UI"
+                                                       FontSize="12" FontWeight="SemiBold"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+
+                                        <!-- Роздільник 1 -->
+                                        <Border Grid.Column="1" Width="1"
+                                                Background="#141828" Margin="0,2"/>
+
+                                        <!-- Зал -->
+                                        <StackPanel Grid.Column="2" Margin="14,0,0,0">
+                                            <TextBlock Text="ЗАЛ"
+                                                       Foreground="#1E2240"
+                                                       FontFamily="Segoe UI"
+                                                       FontSize="9" FontWeight="Medium"
+                                                       Margin="0,0,0,5"/>
+                                            <TextBlock Text="{Binding Room}"
+                                                       Foreground="#A5B4FC"
+                                                       FontFamily="Segoe UI"
+                                                       FontSize="12" FontWeight="SemiBold"/>
+                                        </StackPanel>
+
+                                        <!-- Роздільник 2 -->
+                                        <Border Grid.Column="3" Width="1"
+                                                Background="#141828" Margin="0,2"/>
+
+                                        <!-- Учасники + прогрес -->
+                                        <StackPanel Grid.Column="4" Margin="14,0,0,0">
+                                            <TextBlock Text="УЧАСНИКИ"
+                                                       Foreground="#1E2240"
+                                                       FontFamily="Segoe UI"
+                                                       FontSize="9" FontWeight="Medium"
+                                                       Margin="0,0,0,5"/>
+                                            <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding BookingsCount}"
+                                                           Foreground="#A78BFA"
+                                                           FontFamily="Segoe UI"
+                                                           FontSize="14" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding CapacityText}"
+                                                           Foreground="#2A3060"
+                                                           FontFamily="Segoe UI"
+                                                           FontSize="11"
+                                                           VerticalAlignment="Bottom"
+                                                           Margin="3,0,0,1"/>
+                                            </StackPanel>
+                                            <!-- Прогрес-бар -->
+                                            <Border Height="3" CornerRadius="2"
+                                                    Background="#0C0F1E" Margin="0,5,10,0">
+                                                <Border CornerRadius="2"
+                                                        HorizontalAlignment="Left"
+                                                        Width="{Binding FillWidth}">
+                                                    <Border.Background>
+                                                        <SolidColorBrush Color="{Binding AccentColor}"/>
+                                                    </Border.Background>
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Color="{Binding AccentColor}"
+                                                                          BlurRadius="4" ShadowDepth="0"
+                                                                          Opacity="0.5"/>
+                                                    </Border.Effect>
+                                                </Border>
+                                            </Border>
+                                        </StackPanel>
+
+                                        <!-- Роздільник 3 -->
+                                        <Border Grid.Column="5" Width="1"
+                                                Background="#141828" Margin="0,2"/>
+
+                                        <!-- Тривалість -->
+                                        <StackPanel Grid.Column="6" Margin="14,0,0,0">
+                                            <TextBlock Text="ТРИВАЛІСТЬ"
+                                                       Foreground="#1E2240"
+                                                       FontFamily="Segoe UI"
+                                                       FontSize="9" FontWeight="Medium"
+                                                       Margin="0,0,0,5"/>
+                                            <TextBlock Text="{Binding Duration}"
+                                                       Foreground="#6C63FF"
+                                                       FontFamily="Segoe UI"
+                                                       FontSize="12" FontWeight="SemiBold"/>
+                                        </StackPanel>
+
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             8: ТИЖДЕНЬ
+        ══════════════════════════════════════════════════════════════ -->
+        <Grid x:Name="WeekPanel" Grid.Row="8" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <UniformGrid x:Name="WeekHeader" Grid.Row="0" Rows="1" Margin="0,0,0,8"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <ScrollViewer.Resources>
+                    <Style TargetType="ScrollBar" BasedOn="{StaticResource ThinScrollBar}"/>
+                </ScrollViewer.Resources>
+                <UniformGrid x:Name="WeekGrid" Rows="1"/>
+            </ScrollViewer>
+        </Grid>
+
+    </Grid>
+</Page>

@@ -1,0 +1,192 @@
+<Window x:Class="FitnessClub.Desktop.Views.Dialogs.SellMembershipDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Продаж абонемента" Height="520" Width="460"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+	<Border CornerRadius="16" Background="#0d1020"
+            BorderBrush="#1a1f35" BorderThickness="1">
+		<Border.Effect>
+			<DropShadowEffect Color="#000000" BlurRadius="30" ShadowDepth="0" Opacity="0.6"/>
+		</Border.Effect>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="60"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="70"/>
+			</Grid.RowDefinitions>
+
+			<!-- Заголовок -->
+			<Grid Grid.Row="0" Background="#131929">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
+					<TextBlock Text="🎫" FontSize="18" Margin="0,0,10,0"/>
+					<TextBlock Text="Продати абонемент" Foreground="White"
+                               FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+				</StackPanel>
+				<Button Grid.Column="1" Content="✕" Width="40" Height="40"
+                        Cursor="Hand" Click="Cancel_Click">
+					<Button.Style>
+						<Style TargetType="Button">
+							<Setter Property="Background" Value="Transparent"/>
+							<Setter Property="BorderThickness" Value="0"/>
+							<Setter Property="Foreground" Value="#6b7280"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										<Border Background="{TemplateBinding Background}" CornerRadius="0,16,0,0">
+											<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+										</Border>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter Property="Background" Value="#3d1f1f"/>
+												<Setter Property="Foreground" Value="#f87171"/>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</Button.Style>
+				</Button>
+			</Grid>
+
+			<!-- Форма -->
+			<StackPanel Grid.Row="1" Margin="24,20,24,0">
+
+				<!-- Клієнт -->
+				<StackPanel Margin="0,0,0,16">
+					<TextBlock Text="Клієнт *" Foreground="#8888aa" FontSize="12" Margin="0,0,0,6"/>
+					<Border Background="#1a1f35" BorderBrush="#2a2f45" BorderThickness="1" CornerRadius="10">
+						<ComboBox x:Name="ClientBox" Background="Transparent" Foreground="White"
+                                  BorderThickness="0" Padding="12,10" FontSize="13"
+                                  DisplayMemberPath="FullName"
+                                  SelectionChanged="ClientBox_SelectionChanged"/>
+					</Border>
+				</StackPanel>
+
+				<!-- Тип абонементу -->
+				<StackPanel Margin="0,0,0,16">
+					<TextBlock Text="Тип абонементу *" Foreground="#8888aa" FontSize="12" Margin="0,0,0,6"/>
+					<Border Background="#1a1f35" BorderBrush="#2a2f45" BorderThickness="1" CornerRadius="10">
+						<ComboBox x:Name="MembershipTypeBox" Background="Transparent" Foreground="White"
+                                  BorderThickness="0" Padding="12,10" FontSize="13"
+                                  DisplayMemberPath="Name"
+                                  SelectionChanged="MembershipTypeBox_SelectionChanged"/>
+					</Border>
+				</StackPanel>
+
+				<!-- Інфо про абонемент -->
+				<Border x:Name="MembershipInfoPanel" Background="#131929" CornerRadius="12"
+                        Padding="16" Margin="0,0,0,16" Visibility="Collapsed">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<StackPanel>
+							<TextBlock Text="Ціна" Foreground="#4b5563" FontSize="11"/>
+							<TextBlock x:Name="PriceText" Foreground="#34d399"
+                                       FontSize="16" FontWeight="Bold" Margin="0,4,0,0"/>
+						</StackPanel>
+						<StackPanel Grid.Column="1">
+							<TextBlock Text="Тривалість" Foreground="#4b5563" FontSize="11"/>
+							<TextBlock x:Name="DurationText" Foreground="#60a5fa"
+                                       FontSize="16" FontWeight="Bold" Margin="0,4,0,0"/>
+						</StackPanel>
+						<StackPanel Grid.Column="2">
+							<TextBlock Text="Діє до" Foreground="#4b5563" FontSize="11"/>
+							<TextBlock x:Name="EndDateText" Foreground="#f59e0b"
+                                       FontSize="16" FontWeight="Bold" Margin="0,4,0,0"/>
+						</StackPanel>
+					</Grid>
+				</Border>
+
+				<!-- Спосіб оплати -->
+				<StackPanel Margin="0,0,0,16">
+					<TextBlock Text="Спосіб оплати" Foreground="#8888aa" FontSize="12" Margin="0,0,0,6"/>
+					<Border Background="#1a1f35" BorderBrush="#2a2f45" BorderThickness="1" CornerRadius="10">
+						<ComboBox x:Name="PaymentMethodBox" Background="Transparent" Foreground="White"
+                                  BorderThickness="0" Padding="12,10" FontSize="13"
+                                  SelectedIndex="0">
+							<ComboBoxItem Content="Готівка" Tag="Cash"/>
+							<ComboBoxItem Content="Картка" Tag="Card"/>
+							<ComboBoxItem Content="Онлайн" Tag="Online"/>
+						</ComboBox>
+					</Border>
+				</StackPanel>
+
+				<TextBlock x:Name="ErrorText" Foreground="#f87171" FontSize="12"
+                           Visibility="Collapsed" TextWrapping="Wrap"/>
+			</StackPanel>
+
+			<!-- Кнопки -->
+			<Grid Grid.Row="2" Margin="24,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="12"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Button Grid.Column="0" Content="Скасувати" Height="42"
+                        Cursor="Hand" Click="Cancel_Click">
+					<Button.Style>
+						<Style TargetType="Button">
+							<Setter Property="Background" Value="#1a1f35"/>
+							<Setter Property="Foreground" Value="#9ca3af"/>
+							<Setter Property="BorderThickness" Value="0"/>
+							<Setter Property="FontSize" Value="13"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										<Border Background="{TemplateBinding Background}" CornerRadius="10">
+											<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+										</Border>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter Property="Opacity" Value="0.8"/>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</Button.Style>
+				</Button>
+				<Button Grid.Column="2" Content="🎫  Продати" Height="42"
+                        Cursor="Hand" Click="Sell_Click">
+					<Button.Style>
+						<Style TargetType="Button">
+							<Setter Property="Background" Value="#0d9488"/>
+							<Setter Property="Foreground" Value="White"/>
+							<Setter Property="BorderThickness" Value="0"/>
+							<Setter Property="FontSize" Value="13"/>
+							<Setter Property="FontWeight" Value="SemiBold"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										<Border Background="{TemplateBinding Background}" CornerRadius="10">
+											<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+										</Border>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter Property="Background" Value="#0b7a6e"/>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</Button.Style>
+				</Button>
+			</Grid>
+		</Grid>
+	</Border>
+</Window>

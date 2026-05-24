@@ -1,0 +1,338 @@
+<Page x:Class="FitnessClub.Desktop.Views.Pages.UsersPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#0a0d1a">
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <Grid Grid.Row="0" Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Користувачі" Foreground="White" FontSize="28" FontWeight="Bold"/>
+                <TextBlock Text="Управління доступом та ролями" Foreground="#6b7280" FontSize="13" Margin="0,4,0,0"/>
+            </StackPanel>
+            <Button Grid.Column="1" Content="＋  Новий користувач" Height="40" Padding="20,0" Cursor="Hand" Click="AddUser_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#6C63FF"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="0.85"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+
+        <!-- Статистика -->
+        <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,24">
+            <Border Margin="0,0,12,0" CornerRadius="14" Padding="16">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1e1b4b" Offset="0"/>
+                        <GradientStop Color="#2d1f6e" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel>
+                    <TextBlock Text="👑" FontSize="20" Margin="0,0,0,6"/>
+                    <TextBlock x:Name="AdminCountText" Text="0" Foreground="#a78bfa" FontSize="26" FontWeight="Bold"/>
+                    <TextBlock Text="Адміністраторів" Foreground="#6b7280" FontSize="11"/>
+                </StackPanel>
+            </Border>
+            <Border Margin="0,0,12,0" CornerRadius="14" Padding="16">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#064e3b" Offset="0"/>
+                        <GradientStop Color="#065f46" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel>
+                    <TextBlock Text="💼" FontSize="20" Margin="0,0,0,6"/>
+                    <TextBlock x:Name="ManagerCountText" Text="0" Foreground="#34d399" FontSize="26" FontWeight="Bold"/>
+                    <TextBlock Text="Менеджерів" Foreground="#6b7280" FontSize="11"/>
+                </StackPanel>
+            </Border>
+            <Border Margin="0,0,12,0" CornerRadius="14" Padding="16">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#1e3a5f" Offset="0"/>
+                        <GradientStop Color="#1e40af" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel>
+                    <TextBlock Text="🏋️" FontSize="20" Margin="0,0,0,6"/>
+                    <TextBlock x:Name="TrainerCountText" Text="0" Foreground="#60a5fa" FontSize="26" FontWeight="Bold"/>
+                    <TextBlock Text="Тренерів" Foreground="#6b7280" FontSize="11"/>
+                </StackPanel>
+            </Border>
+            <Border CornerRadius="14" Padding="16">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#451a03" Offset="0"/>
+                        <GradientStop Color="#7c2d12" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel>
+                    <TextBlock Text="👤" FontSize="20" Margin="0,0,0,6"/>
+                    <TextBlock x:Name="ClientCountText" Text="0" Foreground="#fb923c" FontSize="26" FontWeight="Bold"/>
+                    <TextBlock Text="Клієнтів" Foreground="#6b7280" FontSize="11"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+
+        <!-- Пошук + фільтр -->
+        <Grid Grid.Row="2" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Border Background="#0d1020" BorderBrush="#1a1f35" BorderThickness="1" CornerRadius="12" Padding="14,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="🔍" FontSize="14" Foreground="#6b7280" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBox Grid.Column="1" x:Name="SearchBox" Background="Transparent" Foreground="White"
+                             BorderThickness="0" FontSize="13" CaretBrush="White"
+                             VerticalContentAlignment="Center" TextChanged="Search_Changed"/>
+                </Grid>
+            </Border>
+            <ComboBox Grid.Column="1" x:Name="RoleFilter" Margin="12,0,0,0" Height="44"
+                      Background="#0d1020" Foreground="White" BorderBrush="#1a1f35" FontSize="13"
+                      SelectionChanged="RoleFilter_Changed">
+                <ComboBoxItem Content="Всі ролі" IsSelected="True"/>
+                <ComboBoxItem Content="Admin"/>
+                <ComboBoxItem Content="Manager"/>
+                <ComboBoxItem Content="Trainer"/>
+                <ComboBoxItem Content="Client"/>
+            </ComboBox>
+        </Grid>
+        <!-- Таблиця -->
+        <Border Grid.Row="3" CornerRadius="16" Background="#0d1020" BorderBrush="#1a1f35" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="20,16,20,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="120"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="КОРИСТУВАЧ" Foreground="#4b5563" FontSize="11"/>
+                    <TextBlock Grid.Column="1" Text="EMAIL" Foreground="#4b5563" FontSize="11"/>
+                    <TextBlock Grid.Column="2" Text="ТЕЛЕФОН" Foreground="#4b5563" FontSize="11"/>
+                    <TextBlock Grid.Column="3" Text="РОЛЬ" Foreground="#4b5563" FontSize="11"/>
+                    <TextBlock Grid.Column="4" Text="СТАТУС" Foreground="#4b5563" FontSize="11"/>
+                    <TextBlock Grid.Column="5" Text="ДІЇ" Foreground="#4b5563" FontSize="11" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <ListView x:Name="UsersList" Grid.Row="1" Background="Transparent" BorderThickness="0"
+                          Foreground="White" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <Border x:Name="row" Background="{TemplateBinding Background}"
+                                                BorderBrush="#1a1f35" BorderThickness="0,0,0,1" Padding="20,12">
+                                            <ContentPresenter/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="row" Property="Background" Value="#131929"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="120"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="34" Height="34" CornerRadius="17" Margin="0,0,10,0">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="{Binding AvatarColor1}" Offset="0"/>
+                                                <GradientStop Color="{Binding AvatarColor2}" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <TextBlock Text="{Binding Initials}" Foreground="White" FontSize="12"
+                                                   FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding FullName}" Foreground="White" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding CreatedAtStr}" Foreground="#4b5563" FontSize="10"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <TextBlock Grid.Column="1" Text="{Binding Email}" Foreground="#9ca3af" FontSize="12" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Phone}" Foreground="#9ca3af" FontSize="12" VerticalAlignment="Center"/>
+
+                                <Border Grid.Column="3" CornerRadius="8" Padding="10,4" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1e1b4b"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Role}" Value="Manager">
+                                                    <Setter Property="Background" Value="#064e3b"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Role}" Value="Trainer">
+                                                    <Setter Property="Background" Value="#1e3a5f"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Role}" Value="Client">
+                                                    <Setter Property="Background" Value="#451a03"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding RoleIcon}" FontSize="11" Margin="0,0,4,0"/>
+                                        <TextBlock Text="{Binding RoleUa}" FontSize="11" FontWeight="SemiBold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#a78bfa"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Role}" Value="Manager">
+                                                            <Setter Property="Foreground" Value="#34d399"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Role}" Value="Trainer">
+                                                            <Setter Property="Foreground" Value="#60a5fa"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Role}" Value="Client">
+                                                            <Setter Property="Foreground" Value="#fb923c"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Grid.Column="4" CornerRadius="8" Padding="8,4" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1a2e1a"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                    <Setter Property="Background" Value="#2d1f1f"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock FontSize="11" FontWeight="SemiBold">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="● Активний"/>
+                                                <Setter Property="Foreground" Value="#34d399"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                        <Setter Property="Text" Value="○ Неактивний"/>
+                                                        <Setter Property="Foreground" Value="#f87171"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+
+                                <StackPanel Grid.Column="5" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="✏" Width="32" Height="32" Cursor="Hand"
+                                            Tag="{Binding Id}" Click="EditUser_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="#1e1b4b"/>
+                                                <Setter Property="Foreground" Value="#a78bfa"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Opacity" Value="0.8"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button Content="🚫" Width="32" Height="32" Cursor="Hand"
+                                            Margin="6,0,0,0" Tag="{Binding Id}" Click="ToggleUser_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="#2d1f1f"/>
+                                                <Setter Property="Foreground" Value="#f87171"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Opacity" Value="0.8"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

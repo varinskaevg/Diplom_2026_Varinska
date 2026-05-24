@@ -1,0 +1,208 @@
+<Page x:Class="FitnessClub.Desktop.Views.Pages.PaymentsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#0a0d1a">
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок + загальна сума -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Платежі" Foreground="White"
+                           FontSize="28" FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                    <TextBlock Text="Місяць: " Foreground="#6b7280" FontSize="13"/>
+                    <TextBlock x:Name="MonthRevenueText"
+                               Foreground="#34d399" FontSize="13"
+                               FontWeight="SemiBold"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- Фільтр по методу оплати -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,16">
+            <RadioButton x:Name="FilterAll" Content="Всі"
+                         IsChecked="True" Margin="0,0,12,0"
+                         Checked="Filter_Changed"
+                         Foreground="White" FontSize="13"/>
+            <RadioButton x:Name="FilterCash" Content="Готівка"
+                         Margin="0,0,12,0" Checked="Filter_Changed"
+                         Foreground="#34d399" FontSize="13"/>
+            <RadioButton x:Name="FilterCard" Content="Картка"
+                         Margin="0,0,12,0" Checked="Filter_Changed"
+                         Foreground="#60a5fa" FontSize="13"/>
+            <RadioButton x:Name="FilterOnline" Content="Онлайн"
+                         Margin="0,0,12,0" Checked="Filter_Changed"
+                         Foreground="#a78bfa" FontSize="13"/>
+            <RadioButton x:Name="FilterRefunds" Content="Повернення"
+                         Checked="Filter_Changed"
+                         Foreground="#f87171" FontSize="13"/>
+        </StackPanel>
+
+        <!-- Таблиця -->
+        <Border Grid.Row="2" CornerRadius="16" Background="#0d1020"
+                BorderBrush="#1a1f35" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="20,16,20,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="110"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="КЛІЄНТ" Foreground="#4b5563" FontSize="11"/>
+                    <TextBlock Grid.Column="1" Text="ОПИС" Foreground="#4b5563" FontSize="11"/>
+                    <TextBlock Grid.Column="2" Text="МЕТОД" Foreground="#4b5563" FontSize="11"/>
+                    <TextBlock Grid.Column="3" Text="ДАТА" Foreground="#4b5563" FontSize="11"/>
+                    <TextBlock Grid.Column="4" Text="СУМА" Foreground="#4b5563" FontSize="11"
+                               HorizontalAlignment="Right"/>
+                </Grid>
+
+                <ListView x:Name="PaymentsList" Grid.Row="1"
+                          Background="Transparent" BorderThickness="0"
+                          Foreground="White"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <Border x:Name="row"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="#1a1f35"
+                                                BorderThickness="0,0,0,1"
+                                                Padding="20,12">
+                                            <ContentPresenter/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="row" Property="Background" Value="#131929"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="110"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Клієнт -->
+                                <TextBlock Text="{Binding ClientName}"
+                                           Foreground="White" FontSize="13"
+                                           VerticalAlignment="Center"/>
+
+                                <!-- Опис -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Description}"
+                                               Foreground="#9ca3af" FontSize="12"/>
+                                    <!-- Бейдж "Повернення" якщо refund -->
+                                    <Border CornerRadius="4" Padding="5,1" Margin="0,3,0,0"
+                                            HorizontalAlignment="Left"
+                                            Background="#3d0a0a"
+                                            Visibility="{Binding RefundBadgeVisible}">
+                                        <TextBlock Text="↩ Повернення" Foreground="#f87171"
+                                                   FontSize="10" FontWeight="SemiBold"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <!-- Метод оплати -->
+                                <Border Grid.Column="2" CornerRadius="6"
+                                        Padding="8,3" VerticalAlignment="Center"
+                                        HorizontalAlignment="Left">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1a2e1a"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
+                                                    <Setter Property="Background" Value="#1e3a5f"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PaymentMethod}" Value="Online">
+                                                    <Setter Property="Background" Value="#1e1b4b"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsRefund}" Value="True">
+                                                    <Setter Property="Background" Value="#2d1a1a"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock Text="{Binding PaymentMethodUa}"
+                                               FontSize="11" FontWeight="SemiBold">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#34d399"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PaymentMethod}" Value="Card">
+                                                        <Setter Property="Foreground" Value="#60a5fa"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PaymentMethod}" Value="Online">
+                                                        <Setter Property="Foreground" Value="#a78bfa"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsRefund}" Value="True">
+                                                        <Setter Property="Foreground" Value="#f87171"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+
+                                <!-- Дата -->
+                                <TextBlock Grid.Column="3" Text="{Binding PaymentDateStr}"
+                                           Foreground="#9ca3af" FontSize="12"
+                                           VerticalAlignment="Center"/>
+
+                                <!-- Сума — зелена для оплат, червона для повернень -->
+                                <TextBlock Grid.Column="4"
+                                           FontSize="13" FontWeight="SemiBold"
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <Binding Path="Amount" StringFormat="{}{0:N0} ₴"/>
+                                    </TextBlock.Text>
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="#34d399"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsRefund}" Value="True">
+                                                    <Setter Property="Foreground" Value="#f87171"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

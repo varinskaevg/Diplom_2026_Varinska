@@ -1,0 +1,815 @@
+<Page x:Class="FitnessClub.Desktop.Views.Pages.DashboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#08090D">
+
+    <Page.Resources>
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="CornerRadius" Value="24"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#40FFFFFF" Offset="0"/>
+                        <GradientStop Color="#10FFFFFF" Offset="0.5"/>
+                        <GradientStop Color="#20FFFFFF" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#18FFFFFF" Offset="0"/>
+                        <GradientStop Color="#08FFFFFF" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="40" ShadowDepth="0" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="NeonButton" TargetType="Button">
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="#0A1A10"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="MainBorder" CornerRadius="16" Padding="24,0"
+                                BorderThickness="1" BorderBrush="#30FFFFFF">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#00FF94" Offset="0"/>
+                                    <GradientStop Color="#00D67B" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#00FF94" BlurRadius="25" ShadowDepth="0" Opacity="0.6"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="MainBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#00FF94" BlurRadius="45" ShadowDepth="0" Opacity="1"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="MainBorder" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Height" Value="56"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="#80FFFFFF"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="MainBorder" CornerRadius="14" Padding="20,0"
+                                BorderThickness="1" Background="#10FFFFFF" BorderBrush="#20FFFFFF">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="MainBorder" Property="Background" Value="#20FFFFFF"/>
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="#40FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="MainBorder" Property="Background" Value="#30FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ListRow" TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="0,14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border x:Name="RowBorder" Background="Transparent"
+                                BorderBrush="#15FFFFFF" BorderThickness="0,0,0,1"
+                                Padding="{TemplateBinding Padding}" CornerRadius="12">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="RowBorder" Property="Background" Value="#10FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="RowBorder" Property="Background" Value="#15FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#08090D" Offset="0"/>
+                <GradientStop Color="#0A0E18" Offset="0.5"/>
+                <GradientStop Color="#0D1020" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Canvas IsHitTestVisible="False">
+            <Ellipse Canvas.Left="-200" Canvas.Top="-150" Width="600" Height="600">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#2000FF94" Offset="0"/>
+                        <GradientStop Color="#0000FF94" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse Canvas.Left="800" Canvas.Top="200" Width="500" Height="500">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#154A8AFF" Offset="0"/>
+                        <GradientStop Color="#004A8AFF" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse Canvas.Left="400" Canvas.Top="600" Width="400" Height="400">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#10A855F7" Offset="0"/>
+                        <GradientStop Color="#00A855F7" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+        </Canvas>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid Margin="40,32,40,48">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- HEADER -->
+                <Grid Grid.Row="0" Margin="0,0,0,36">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock x:Name="GreetingText" Text="Вітаємо у системі"
+                                   Foreground="#60FFFFFF" FontFamily="Segoe UI" FontSize="17" FontWeight="Light"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="Dashboard" FontFamily="Segoe UI" FontSize="48" FontWeight="Bold">
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#FFFFFF" Offset="0"/>
+                                        <GradientStop Color="#A0FFFFFF" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            <Border CornerRadius="24" Padding="18,10" Margin="20,8,0,0" VerticalAlignment="Center"
+                                    BorderThickness="1" BorderBrush="#3000FF94">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#1500FF94" Offset="0"/>
+                                        <GradientStop Color="#0800FF94" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse x:Name="LiveDot" Width="10" Height="10" VerticalAlignment="Center" Margin="0,0,10,0"
+                                             Fill="#00FF94">
+                                        <Ellipse.Effect>
+                                            <DropShadowEffect Color="#00FF94" BlurRadius="15" ShadowDepth="0" Opacity="1"/>
+                                        </Ellipse.Effect>
+                                    </Ellipse>
+                                    <TextBlock x:Name="CurrentTimeText" Text="LIVE"
+                                               Foreground="#00FF94" FontFamily="Segoe UI" FontSize="16" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Style="{StaticResource GhostButton}" Margin="0,0,14,0" Click="Refresh_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#x21BB;" Foreground="#80FFFFFF" FontSize="18" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBlock Text="Оновити" Foreground="#80FFFFFF" FontFamily="Segoe UI" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource NeonButton}" Click="AddClient_Click">
+                            <TextBlock Text="+  Новий клієнт" Foreground="#0A1A10" FontSize="16" FontWeight="Bold"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <!-- KPI КАРТКИ -->
+                <Grid Grid.Row="1" Margin="0,0,0,28">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- КЛІЄНТИ -->
+                    <Border Grid.Column="0" Grid.RowSpan="2" Style="{StaticResource GlassCard}" 
+                            Margin="0,0,14,0" Padding="28">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#204A8AFF" Offset="0"/>
+                                <GradientStop Color="#10283870" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Border Width="64" Height="64" CornerRadius="18" HorizontalAlignment="Left">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#4A8AFF" Offset="0"/>
+                                        <GradientStop Color="#3A70D0" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#4A8AFF" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+                                </Border.Effect>
+                                <TextBlock Text="&#x1F465;" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                                <TextBlock Text="Всього клієнтів"
+                                           Foreground="#80FFFFFF" FontFamily="Segoe UI" FontSize="17" FontWeight="Light"/>
+                                <TextBlock x:Name="TotalClientsText" Text="1,247" FontFamily="Segoe UI" 
+                                           FontSize="80" FontWeight="Bold" Margin="0,8,0,8">
+                                    <TextBlock.Foreground>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#FFFFFF" Offset="0"/>
+                                            <GradientStop Color="#B0C8FF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </TextBlock.Foreground>
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect Color="#4A8AFF" BlurRadius="30" ShadowDepth="0" Opacity="0.6"/>
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                            </StackPanel>
+                            <Border Grid.Row="2" CornerRadius="12" Padding="16,12" HorizontalAlignment="Left"
+                                    Background="#1500FF94">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#x2191;" Foreground="#00FF94" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="NewClientsText" Text="+23" Foreground="#00FF94" 
+                                               FontFamily="Segoe UI" FontSize="16" FontWeight="Bold" Margin="6,0,0,0"/>
+                                    <TextBlock Text=" цього місяця" Foreground="#60FFFFFF" 
+                                               FontFamily="Segoe UI" FontSize="15" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- АБОНЕМЕНТИ -->
+                    <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource GlassCard}" 
+                            Margin="0,0,14,14" Padding="26">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#2000FF94" Offset="0"/>
+                                <GradientStop Color="#10004830" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <TextBlock Text="Активних абонементів"
+                                           Foreground="#70FFFFFF" FontFamily="Segoe UI" FontSize="15" FontWeight="Light"/>
+                                <Border HorizontalAlignment="Right" Width="46" Height="46" CornerRadius="13"
+                                        Background="#2000FF94">
+                                    <TextBlock Text="&#x2713;" FontSize="20" Foreground="#00FF94"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </Grid>
+                            <TextBlock Grid.Row="1" x:Name="ActiveMembersText" Text="892"
+                                       Foreground="#00FF94" FontFamily="Segoe UI" FontSize="54" FontWeight="Bold"
+                                       Margin="0,12,0,8">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Color="#00FF94" BlurRadius="30" ShadowDepth="0" Opacity="0.7"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                                <Border CornerRadius="8" Padding="10,6" Background="#20F59E0B">
+                                    <TextBlock x:Name="ExpiringSoonText" Text="12" Foreground="#F59E0B" 
+                                               FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"/>
+                                </Border>
+                                <TextBlock Text=" закінчується" Foreground="#50FFFFFF" 
+                                           FontFamily="Segoe UI" FontSize="14" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- ДОХІД -->
+                    <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource GlassCard}" 
+                            Margin="0,0,14,0" Padding="26">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#20FF9A3C" Offset="0"/>
+                                <GradientStop Color="#10503010" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <TextBlock Text="Дохід місяця"
+                                           Foreground="#70FFFFFF" FontFamily="Segoe UI" FontSize="15" FontWeight="Light"/>
+                                <Border HorizontalAlignment="Right" Width="46" Height="46" CornerRadius="13"
+                                        Background="#20FF9A3C">
+                                    <TextBlock Text="&#x20B4;" FontSize="20" Foreground="#FF9A3C" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </Grid>
+                            <TextBlock Grid.Row="1" x:Name="RevenueText" Text="284,500"
+                                       Foreground="#FF9A3C" FontFamily="Segoe UI" FontSize="42" FontWeight="Bold"
+                                       Margin="0,12,0,8">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Color="#FF9A3C" BlurRadius="25" ShadowDepth="0" Opacity="0.6"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <TextBlock Grid.Row="2" Text="Завершені платежі" Foreground="#50FFFFFF" 
+                                       FontFamily="Segoe UI" FontSize="14"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- ВІДВІДУВАННЯ -->
+                    <Border Grid.Column="2" Grid.Row="0" Style="{StaticResource GlassCard}" 
+                            Margin="0,0,14,14" Padding="26">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#2038BDF8" Offset="0"/>
+                                <GradientStop Color="#10104060" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <TextBlock Text="Відвідувань сьогодні"
+                                           Foreground="#70FFFFFF" FontFamily="Segoe UI" FontSize="15" FontWeight="Light"/>
+                                <Border HorizontalAlignment="Right" Width="46" Height="46" CornerRadius="13"
+                                        Background="#2038BDF8">
+                                    <TextBlock Text="&#x1F6AA;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </Grid>
+                            <TextBlock Grid.Row="1" x:Name="TodayVisitsText" Text="156"
+                                       Foreground="#38BDF8" FontFamily="Segoe UI" FontSize="54" FontWeight="Bold"
+                                       Margin="0,12,0,8">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Color="#38BDF8" BlurRadius="30" ShadowDepth="0" Opacity="0.6"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <TextBlock Grid.Row="2" Text="Унікальних входів" Foreground="#50FFFFFF" 
+                                       FontFamily="Segoe UI" FontSize="14"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- ТРЕНЕРИ -->
+                    <Border Grid.Column="2" Grid.Row="1" Style="{StaticResource GlassCard}" 
+                            Margin="0,0,14,0" Padding="26">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#20C084FC" Offset="0"/>
+                                <GradientStop Color="#10402060" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <TextBlock Text="Тренерів"
+                                           Foreground="#70FFFFFF" FontFamily="Segoe UI" FontSize="15" FontWeight="Light"/>
+                                <Border HorizontalAlignment="Right" Width="46" Height="46" CornerRadius="13"
+                                        Background="#20C084FC">
+                                    <TextBlock Text="&#x1F3CB;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </Grid>
+                            <TextBlock Grid.Row="1" x:Name="TotalTrainersText" Text="18"
+                                       Foreground="#C084FC" FontFamily="Segoe UI" FontSize="54" FontWeight="Bold"
+                                       Margin="0,12,0,8">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Color="#C084FC" BlurRadius="30" ShadowDepth="0" Opacity="0.6"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <TextBlock Grid.Row="2" Text="Активних тренерів" Foreground="#50FFFFFF" 
+                                       FontFamily="Segoe UI" FontSize="14"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- ЗАНЯТЬ СЬОГОДНІ -->
+                    <Border Grid.Column="3" Grid.RowSpan="2" Style="{StaticResource GlassCard}" Padding="28">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#20F472B6" Offset="0"/>
+                                <GradientStop Color="#10401828" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="64" Height="64" CornerRadius="18">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#F472B6" Offset="0"/>
+                                            <GradientStop Color="#D946A0" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#F472B6" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+                                    </Border.Effect>
+                                    <TextBlock Text="&#x1F4C5;" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="Занять сьогодні" Foreground="#80FFFFFF" 
+                                               FontFamily="Segoe UI" FontSize="17" FontWeight="Light"/>
+                                    <TextBlock Text="Запланованих" Foreground="#50FFFFFF" 
+                                               FontFamily="Segoe UI" FontSize="14"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <TextBlock Grid.Row="1" x:Name="TodaySchedulesText" Text="24" 
+                                       FontFamily="Segoe UI" FontSize="108" FontWeight="Bold"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#FFFFFF" Offset="0"/>
+                                        <GradientStop Color="#F472B6" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Color="#F472B6" BlurRadius="40" ShadowDepth="0" Opacity="0.6"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <Button Grid.Row="2" Style="{StaticResource GhostButton}" Click="ViewSchedule_Click" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Переглянути розклад &#x2192;" Foreground="#F472B6" 
+                                           FontFamily="Segoe UI" FontSize="15" FontWeight="SemiBold"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- CHARTS ROW -->
+                <Grid Grid.Row="2" Margin="0,0,0,28">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Графік доходів -->
+                    <Border Grid.Column="0" Style="{StaticResource GlassCard}" Margin="0,0,14,0" Padding="28">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="200"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid Margin="0,0,0,20">
+                                <StackPanel>
+                                    <TextBlock Text="Дохід по місяцях" Foreground="#FFFFFF" 
+                                               FontFamily="Segoe UI" FontSize="18" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Останні 6 місяців" Foreground="#50FFFFFF" 
+                                               FontFamily="Segoe UI" FontSize="14" Margin="0,4,0,0"/>
+                                </StackPanel>
+                                <TextBlock x:Name="RevenueChartTotal" Text="&#x20B4;1,284,500"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                                           Foreground="#00FF94" FontFamily="Segoe UI" FontSize="26" FontWeight="Bold">
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect Color="#00FF94" BlurRadius="20" ShadowDepth="0" Opacity="0.6"/>
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                            </Grid>
+                            <Canvas Grid.Row="1" x:Name="RevenueChartCanvas" ClipToBounds="True">
+                                <Line X1="0" Y1="0"   X2="3000" Y2="0"   Stroke="#15FFFFFF" StrokeThickness="1" StrokeDashArray="6,4"/>
+                                <Line X1="0" Y1="50"  X2="3000" Y2="50"  Stroke="#15FFFFFF" StrokeThickness="1" StrokeDashArray="6,4"/>
+                                <Line X1="0" Y1="100" X2="3000" Y2="100" Stroke="#15FFFFFF" StrokeThickness="1" StrokeDashArray="6,4"/>
+                                <Line X1="0" Y1="150" X2="3000" Y2="150" Stroke="#15FFFFFF" StrokeThickness="1" StrokeDashArray="6,4"/>
+                                <Line X1="0" Y1="200" X2="3000" Y2="200" Stroke="#15FFFFFF" StrokeThickness="1" StrokeDashArray="6,4"/>
+                            </Canvas>
+                            <Grid Grid.Row="2" Margin="0,16,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="MonthLabel0" Grid.Column="0" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock x:Name="MonthLabel1" Grid.Column="1" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock x:Name="MonthLabel2" Grid.Column="2" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock x:Name="MonthLabel3" Grid.Column="3" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock x:Name="MonthLabel4" Grid.Column="4" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock x:Name="MonthLabel5" Grid.Column="5" HorizontalAlignment="Center" Foreground="#00FF94" FontFamily="Segoe UI" FontSize="13" FontWeight="SemiBold"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Барчарт відвідувань -->
+                    <Border Grid.Column="1" Style="{StaticResource GlassCard}" Margin="0,0,14,0" Padding="28">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="200"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="Відвідування" Foreground="#FFFFFF" 
+                                           FontFamily="Segoe UI" FontSize="18" FontWeight="SemiBold"/>
+                                <TextBlock Text="По днях тижня" Foreground="#50FFFFFF" 
+                                           FontFamily="Segoe UI" FontSize="14" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <Canvas Grid.Row="1" x:Name="VisitsBarCanvas" ClipToBounds="True">
+                                <Line X1="0" Y1="0"   X2="3000" Y2="0"   Stroke="#15FFFFFF" StrokeThickness="1" StrokeDashArray="6,4"/>
+                                <Line X1="0" Y1="50"  X2="3000" Y2="50"  Stroke="#15FFFFFF" StrokeThickness="1" StrokeDashArray="6,4"/>
+                                <Line X1="0" Y1="100" X2="3000" Y2="100" Stroke="#15FFFFFF" StrokeThickness="1" StrokeDashArray="6,4"/>
+                                <Line X1="0" Y1="150" X2="3000" Y2="150" Stroke="#15FFFFFF" StrokeThickness="1" StrokeDashArray="6,4"/>
+                                <Line X1="0" Y1="200" X2="3000" Y2="200" Stroke="#15FFFFFF" StrokeThickness="1" StrokeDashArray="6,4"/>
+                            </Canvas>
+                            <Grid Grid.Row="2" Margin="0,16,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Пн" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock Grid.Column="1" Text="Вт" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock Grid.Column="2" Text="Ср" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock Grid.Column="3" Text="Чт" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock Grid.Column="4" Text="Пт" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock Grid.Column="5" Text="Сб" HorizontalAlignment="Center" Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"/>
+                                <TextBlock Grid.Column="6" Text="Нд" HorizontalAlignment="Center" Foreground="#38BDF8" FontFamily="Segoe UI" FontSize="13" FontWeight="SemiBold"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Швидкі дії -->
+                    <Border Grid.Column="2" Style="{StaticResource GlassCard}" Padding="26">
+                        <StackPanel>
+                            <TextBlock Text="Швидкі дії" Foreground="#FFFFFF" 
+                                       FontFamily="Segoe UI" FontSize="18" FontWeight="SemiBold"/>
+                            <TextBlock Text="Часті операції" Foreground="#50FFFFFF" 
+                                       FontFamily="Segoe UI" FontSize="14" Margin="0,4,0,24"/>
+
+                            <Button Style="{StaticResource NeonButton}" Margin="0,0,0,12" Click="AddClient_Click" Height="52">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="+" Foreground="#0A1A10" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Новий клієнт" Foreground="#0A1A10" FontFamily="Segoe UI" FontSize="15" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource GhostButton}" Margin="0,0,0,10" Click="SellMembership_Click" Height="50">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#x1F3AB;" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Продати абонемент" Foreground="#80FFFFFF" FontFamily="Segoe UI" FontSize="14"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource GhostButton}" Margin="0,0,0,10" Click="CheckIn_Click" Height="50">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#x1F4CB;" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Відмітити вхід" Foreground="#80FFFFFF" FontFamily="Segoe UI" FontSize="14"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource GhostButton}" Click="ViewSchedule_Click" Height="50">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#x1F4C5;" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Розклад" Foreground="#80FFFFFF" FontFamily="Segoe UI" FontSize="14"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Border CornerRadius="16" Padding="18,16" Margin="0,20,0,0" BorderThickness="1"
+                                    BorderBrush="#2000FF94">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#1000FF94" Offset="0"/>
+                                        <GradientStop Color="#0800FF94" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <StackPanel>
+                                    <TextBlock Text="СИСТЕМА" Foreground="#4000FF94" FontFamily="Segoe UI" FontSize="12" FontWeight="Bold" Margin="0,0,0,12"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <Ellipse Width="10" Height="10" VerticalAlignment="Center" Margin="0,0,10,0" Fill="#00FF94">
+                                            <Ellipse.Effect>
+                                                <DropShadowEffect Color="#00FF94" BlurRadius="10" ShadowDepth="0" Opacity="1"/>
+                                            </Ellipse.Effect>
+                                        </Ellipse>
+                                        <TextBlock Text="API підключено" Foreground="#60FFFFFF" FontFamily="Segoe UI" FontSize="14"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse Width="10" Height="10" VerticalAlignment="Center" Margin="0,0,10,0" Fill="#00FF94">
+                                            <Ellipse.Effect>
+                                                <DropShadowEffect Color="#00FF94" BlurRadius="10" ShadowDepth="0" Opacity="1"/>
+                                            </Ellipse.Effect>
+                                        </Ellipse>
+                                        <TextBlock Text="База даних ОК" Foreground="#60FFFFFF" FontFamily="Segoe UI" FontSize="14"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- НИЖНІЙ РЯД -->
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="420"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Останні платежі -->
+                    <Border Grid.Column="0" Style="{StaticResource GlassCard}" Margin="0,0,14,0" Padding="28">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Margin="0,0,0,20">
+                                <StackPanel>
+                                    <TextBlock Text="Останні платежі" Foreground="#FFFFFF" 
+                                               FontFamily="Segoe UI" FontSize="18" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Нещодавні транзакції" Foreground="#50FFFFFF" 
+                                               FontFamily="Segoe UI" FontSize="14" Margin="0,4,0,0"/>
+                                </StackPanel>
+                                <Border HorizontalAlignment="Right" CornerRadius="10" Padding="16,10" Cursor="Hand"
+                                        MouseLeftButtonUp="ViewAllPayments_Click" BorderThickness="1"
+                                        Background="#10FFFFFF" BorderBrush="#20FFFFFF">
+                                    <TextBlock Text="Всі &#x2192;" Foreground="#60FFFFFF" FontFamily="Segoe UI" FontSize="14"/>
+                                </Border>
+                            </Grid>
+                            <ListView x:Name="RecentPaymentsList" Grid.Row="1"
+                                      Background="Transparent" BorderThickness="0" Foreground="White" MaxHeight="280">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem" BasedOn="{StaticResource ListRow}"/>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="52"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="130"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="44" Height="44" CornerRadius="13">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                        <GradientStop Color="#2000FF94" Offset="0"/>
+                                                        <GradientStop Color="#1000FF94" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <TextBlock Text="&#x20B4;" Foreground="#00FF94" FontSize="18" FontWeight="Bold"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0">
+                                                <TextBlock Text="{Binding ClientName}" Foreground="#FFFFFF" 
+                                                           FontFamily="Segoe UI" FontSize="15"/>
+                                                <TextBlock Text="{Binding PaymentMethod}" Foreground="#50FFFFFF" 
+                                                           FontFamily="Segoe UI" FontSize="13"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="2" Text="{Binding PaymentDate, StringFormat='{}{0:dd.MM}'}"
+                                                       Foreground="#50FFFFFF" FontFamily="Segoe UI" FontSize="13"
+                                                       VerticalAlignment="Center" Margin="0,0,14,0"/>
+                                            <Border Grid.Column="3" CornerRadius="10" Padding="14,8" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                        <GradientStop Color="#1500FF94" Offset="0"/>
+                                                        <GradientStop Color="#0800FF94" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <TextBlock Foreground="#00FF94" FontFamily="Segoe UI" FontSize="15" FontWeight="Bold">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="Amount" StringFormat="{}{0:N0} &#x20B4;"/>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Border>
+
+                    <!-- Закінчуються абонементи -->
+                    <Border Grid.Column="1" Style="{StaticResource GlassCard}" Padding="28">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Margin="0,0,0,20">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#x26A0;" Foreground="#F59E0B" FontSize="18" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Закінчуються" Foreground="#FFFFFF" 
+                                                   FontFamily="Segoe UI" FontSize="18" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Наступні 7 днів" Foreground="#50FFFFFF" 
+                                               FontFamily="Segoe UI" FontSize="14" Margin="0,4,0,0"/>
+                                </StackPanel>
+                                <Border HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="10" Padding="14,8">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#20F59E0B" Offset="0"/>
+                                            <GradientStop Color="#10F59E0B" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <TextBlock x:Name="ExpiringCountBadge" Text="12 клієнтів"
+                                               Foreground="#F59E0B" FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"/>
+                                </Border>
+                            </Grid>
+                            <ListView x:Name="ExpiringMembershipsList" Grid.Row="1"
+                                      Background="Transparent" BorderThickness="0" Foreground="White" MaxHeight="280">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem" BasedOn="{StaticResource ListRow}"/>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding ClientName}" Foreground="#FFFFFF" 
+                                                           FontFamily="Segoe UI" FontSize="15"/>
+                                                <TextBlock Text="{Binding MembershipType}" Foreground="#50FFFFFF" 
+                                                           FontFamily="Segoe UI" FontSize="13"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                                <Border CornerRadius="8" Padding="12,6" HorizontalAlignment="Right" Margin="0,0,0,4">
+                                                    <Border.Background>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                            <GradientStop Color="#20F59E0B" Offset="0"/>
+                                                            <GradientStop Color="#10F59E0B" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                    <TextBlock Text="{Binding DaysLeft}" Foreground="#F59E0B" 
+                                                               FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"/>
+                                                </Border>
+                                                <TextBlock Text="{Binding EndDate}" Foreground="#40FFFFFF" 
+                                                           FontFamily="Segoe UI" FontSize="12" HorizontalAlignment="Right"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>
